@@ -13,19 +13,19 @@
         android:theme="@style/Theme.CourseAssistantApplication"
         tools:targetApi="31">
         <activity
-            android:name=".ViewProfileActivity"
+            android:name=".activity.ViewProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".UpdateProfileActivity"
+            android:name=".activity.UpdateProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".ForgetPasswordActivity"
+            android:name=".activity.ForgetPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".activity.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".SignUpActivity"
+            android:name=".activity.SignUpActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
