@@ -1,4 +1,4 @@
-package com.example.courseassistantapplication;
+package com.example.courseassistantapplication.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,9 +8,10 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.courseassistantapplication.R;
+import com.example.courseassistantapplication.model.Student;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -23,12 +24,12 @@ import java.util.HashMap;
 
 public class SignUpActivity extends AppCompatActivity {
     private EditText signUpEmail, signUpPassword, signUpName, signUp_surname, signUp_ID, sign_education, sign_phoneNumber;
-    private String txtEmail, txtPassword, txtName, txtSurname, txtID, txtEducation, txtPhoneNumber;
+
+    //private String txtEmail, txtPassword, txtName, txtSurname, txtID, txtEducation, txtPhoneNumber;
+    //private HashMap<String, Object> mData;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
     private DatabaseReference mReference;
-    private HashMap<String, Object> mData;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,47 +50,38 @@ public class SignUpActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mReference = FirebaseDatabase.getInstance().getReference();
     }
-    public void login(View v){
 
-        startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
 
-    };
-
+    //Öğrenci kayıt olma
     public void kayitOl(View v){
-        txtEmail= signUpEmail.getText().toString();
-        txtPassword = signUpPassword.getText().toString();
-        txtName= signUpName.getText().toString();
-        txtSurname = signUp_surname.getText().toString();
-        txtID = signUp_ID.getText().toString();
-        txtEducation= sign_education.getText().toString();
-        txtPhoneNumber= sign_phoneNumber.getText().toString();
+        Student student = new Student();
 
+        student.setEmail(signUpEmail.getText().toString());
+        student.setStudentId(signUp_ID.getText().toString());
+        student.setPhone(sign_phoneNumber.getText().toString());
+        student.setName(signUpName.getText().toString());
+        student.setSurname(signUp_surname.getText().toString());
+        student.setOngoingEducation(sign_education.getText().toString());
+        student.setPassword(signUpPassword.getText().toString());
 
-
-        if (!TextUtils.isEmpty(txtEmail) && !TextUtils.isEmpty(txtPassword) && !TextUtils.isEmpty(txtName) && !TextUtils.isEmpty(txtSurname)){
-            mAuth.createUserWithEmailAndPassword(txtEmail,txtPassword)//Kullanıcı email ve şifreyle kaydetme
+        if (!TextUtils.isEmpty(student.getEmail()) && !TextUtils.isEmpty(student.getPassword())
+                && !TextUtils.isEmpty(student.getName()) && !TextUtils.isEmpty(student.getSurname())){
+            //Kullanıcı email ve şifreyle kaydetme
+            mAuth.createUserWithEmailAndPassword(student.getEmail(),student.getPassword())
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
 
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()){
 
-
                                 mUser = mAuth.getCurrentUser();
                                 mUser.sendEmailVerification();
 
-                                mData = new HashMap<>();
-                                mData.put("KullanıcıAdı", txtName);
-                                mData.put("KullanıcıSoyadı", txtSurname);
-                                mData.put("KullanıcıEmail", txtEmail);
-                                mData.put("KullanıcıŞifre", txtPassword);
-                                mData.put("KullanıcıNumarası", txtID);
-                                mData.put("KullanıcıTelefonu", txtPhoneNumber);
-                                mData.put("KullanıcıEğitimDüzeyi", txtEducation);
-                                mData.put("KullaniciID", mUser.getUid());
+                                student.setUserId(mUser.getUid());
 
-                                mReference.child("Kullanıcılar").child(mUser.getUid())
-                                        .setValue(mData)
+
+                                mReference.child("Öğrenciler").child(student.getEmail())
+                                        .setValue(student)
                                         .addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
@@ -112,7 +104,9 @@ public class SignUpActivity extends AppCompatActivity {
         }else{
             Toast.makeText(this, "Email Ve Şifre Boş Olamaz", Toast.LENGTH_SHORT).show();
         }
-
-
-
-    } }
+    }
+    public void login(View v){
+        startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
+        finish();
+    };
+}
