@@ -80,7 +80,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 student.setUserId(mUser.getUid());
 
 
-                                mReference.child("Öğrenciler").child(student.getEmail())
+                                mReference.child("Öğrenciler").child(student.getStudentId())
                                         .setValue(student)
                                         .addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<Void>() {
                                             @Override
