@@ -200,5 +200,15 @@
                 android:onClick="update"
                 app:cornerRadius="20dp"/>
         </LinearLayout>
+
     </androidx.cardview.widget.CardView>
+    <Button
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:text="Reports"
+        android:id="@+id/report_button"
+        android:textSize="18sp"
+        android:backgroundTint="@color/black"
+        android:onClick="listReports"
+        app:cornerRadius="20dp"/>
 </LinearLayout>

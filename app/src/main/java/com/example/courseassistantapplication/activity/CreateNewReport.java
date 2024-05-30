@@ -18,6 +18,7 @@ import com.example.courseassistantapplication.model.Course;
 import com.example.courseassistantapplication.model.Report;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,7 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Date;
 
-public class createNewReport extends AppCompatActivity {
+public class CreateNewReport extends AppCompatActivity {
 
     private EditText editTextReportScope, editTextCourseName, editTextReportSubject, editTextReportBody;
     Spinner spinnerRecipient;
@@ -76,7 +77,7 @@ public class createNewReport extends AppCompatActivity {
                                    recipient = tmpCourse.getEmailOfInstructor();
                                };
                            }
-                           if (recipient.isEmpty()){
+                           if (recipient == null){
                                recipient = "Akademisyen mailine ulaşılamıyor";
                            }
                         }else{
@@ -87,7 +88,7 @@ public class createNewReport extends AppCompatActivity {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-                        Toast.makeText(createNewReport.this, error.toException().getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CreateNewReport.this, error.toException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -96,20 +97,21 @@ public class createNewReport extends AppCompatActivity {
                         !reportBody.isEmpty()) {
                     Report report = new Report(reportScope, courseName, recipient, reportSubject, reportBody, reportDate);
                     reportReference.push().setValue(report)
-                            .addOnCompleteListener(createNewReport.this, new OnCompleteListener<Void>() {
+                            .addOnCompleteListener(CreateNewReport.this, new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
                                         // Email gönderme işlevi
                                         sendEmail(report);
-                                        Toast.makeText(createNewReport.this, "Şikayet Oluşturuldu", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(CreateNewReport.this, "Şikayet Oluşturuldu", Toast.LENGTH_SHORT).show();
+                                        finish();
                                     } else {
-                                        Toast.makeText(createNewReport.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(CreateNewReport.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
                 } else {
-                    Toast.makeText(createNewReport.this, "Yukarıdaki Alanlardan Herhangi Biri Boş Bırakılamaz", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateNewReport.this, "Yukarıdaki Alanlardan Herhangi Biri Boş Bırakılamaz", Toast.LENGTH_SHORT).show();
                 }
             }
         });
