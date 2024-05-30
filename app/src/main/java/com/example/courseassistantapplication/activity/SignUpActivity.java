@@ -72,6 +72,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 assert mUser != null;
                                 mUser.sendEmailVerification();
 
+
                                 String userId = mUser.getUid();
 
                                 if (email.endsWith("@std.yildiz.edu.tr")) {
@@ -116,6 +117,7 @@ public class SignUpActivity extends AppCompatActivity {
                                                     } else {
                                                         Toast.makeText(SignUpActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                                     }
+
                                                 }
                                             });
 
