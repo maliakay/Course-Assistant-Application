@@ -164,4 +164,8 @@ public class ViewProfileActivity extends AppCompatActivity {
         }
     }
 
+
+    public void listReports(View v){
+        startActivity(new Intent(ViewProfileActivity.this, ListReportsActivity.class));
+    }
 }

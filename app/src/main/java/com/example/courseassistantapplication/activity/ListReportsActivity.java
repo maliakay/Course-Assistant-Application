@@ -9,9 +9,6 @@ import android.widget.Button;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,9 +25,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class listReportsActivity extends AppCompatActivity {
+public class ListReportsActivity extends AppCompatActivity {
 
     private RecyclerView recyclerViewReports;
     private ReportAdapter reportAdapter;
@@ -65,7 +61,7 @@ public class listReportsActivity extends AppCompatActivity {
                     }
                 });
                 reportAdapter = new ReportAdapter(reportList);
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(listReportsActivity.this);
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(ListReportsActivity.this);
                 recyclerViewReports.setLayoutManager(layoutManager);
                 recyclerViewReports.setAdapter(reportAdapter);
             }
@@ -93,7 +89,7 @@ public class listReportsActivity extends AppCompatActivity {
         buttonNewReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(listReportsActivity.this, createNewReport.class);
+                Intent intent = new Intent(ListReportsActivity.this, CreateNewReport.class);
                 startActivity(intent);
             }
         });
