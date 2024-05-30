@@ -43,10 +43,6 @@ public class SignUpActivity extends AppCompatActivity {
         sign_education = findViewById(R.id.sign_education);
         sign_phoneNumber = findViewById(R.id.sign_phoneNumber);
 
-
-
-
-
         mAuth = FirebaseAuth.getInstance();
         mReference = FirebaseDatabase.getInstance().getReference();
     }
@@ -78,7 +74,6 @@ public class SignUpActivity extends AppCompatActivity {
                                 mUser.sendEmailVerification();
 
                                 student.setUserId(mUser.getUid());
-
 
                                 mReference.child("Öğrenciler").child(student.getStudentId())
                                         .setValue(student)
