@@ -6,7 +6,7 @@ import java.util.Date;
 public class Course {
     private String courseId;
     private String courseName;
-    private Date date;
+    private String date;
     private int numberOfGroups;
     private String completionStatus;
     private int getNumberOfStudents;
@@ -47,11 +47,11 @@ public class Course {
         this.courseName = courseName;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
