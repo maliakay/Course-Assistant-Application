@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.courseassistantapplication.R;
 import com.example.courseassistantapplication.model.Student;
+import com.example.courseassistantapplication.model.Instructor;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -25,8 +26,6 @@ import java.util.HashMap;
 public class SignUpActivity extends AppCompatActivity {
     private EditText signUpEmail, signUpPassword, signUpName, signUp_surname, signUp_ID, sign_education, sign_phoneNumber;
 
-    //private String txtEmail, txtPassword, txtName, txtSurname, txtID, txtEducation, txtPhoneNumber;
-    //private HashMap<String, Object> mData;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
     private DatabaseReference mReference;
@@ -43,70 +42,103 @@ public class SignUpActivity extends AppCompatActivity {
         sign_education = findViewById(R.id.sign_education);
         sign_phoneNumber = findViewById(R.id.sign_phoneNumber);
 
-
-
-
-
         mAuth = FirebaseAuth.getInstance();
         mReference = FirebaseDatabase.getInstance().getReference();
     }
 
-
-    //Öğrenci kayıt olma
     public void kayitOl(View v){
-        Student student = new Student();
+        String email = signUpEmail.getText().toString();
+        String password = signUpPassword.getText().toString();
+        String name = signUpName.getText().toString();
+        String surname = signUp_surname.getText().toString();
+        String studentId = signUp_ID.getText().toString();
+        String phone = sign_phoneNumber.getText().toString();
+        String education = sign_education.getText().toString();
 
-        student.setEmail(signUpEmail.getText().toString());
-        student.setStudentId(signUp_ID.getText().toString());
-        student.setPhone(sign_phoneNumber.getText().toString());
-        student.setName(signUpName.getText().toString());
-        student.setSurname(signUp_surname.getText().toString());
-        student.setOngoingEducation(sign_education.getText().toString());
-        student.setPassword(signUpPassword.getText().toString());
+        if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(name) && !TextUtils.isEmpty(surname)){
 
-        if (!TextUtils.isEmpty(student.getEmail()) && !TextUtils.isEmpty(student.getPassword())
-                && !TextUtils.isEmpty(student.getName()) && !TextUtils.isEmpty(student.getSurname())){
-            //Kullanıcı email ve şifreyle kaydetme
-            mAuth.createUserWithEmailAndPassword(student.getEmail(),student.getPassword())
+            if (!phone.startsWith("0")) {
+                Toast.makeText(SignUpActivity.this, "Telefon numarası '0' ile başlamalıdır", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
 
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()){
-
                                 mUser = mAuth.getCurrentUser();
+                                assert mUser != null;
                                 mUser.sendEmailVerification();
 
-                                student.setUserId(mUser.getUid());
 
+                                String userId = mUser.getUid();
 
-                                mReference.child("Öğrenciler").child(student.getStudentId())
-                                        .setValue(student)
-                                        .addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if (task.isSuccessful()){
-                                                    Toast.makeText(SignUpActivity.this, "Kayıt İşlemi başarılı", Toast.LENGTH_SHORT).show();
-                                                }else {
-                                                    Toast.makeText(SignUpActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                if (email.endsWith("@std.yildiz.edu.tr")) {
+                                    Student student = new Student(name, surname, email, studentId);
+                                    student.setPhone(phone);
+                                    student.setOngoingEducation(education);
+                                    student.setUserId(userId);
+
+                                    String formattedEmail = email.replace(".", "_").replace("@", "_at_");
+
+                                    mReference.child("Öğrenciler").child(formattedEmail)
+                                            .setValue(student)
+                                            .addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()){
+                                                        Toast.makeText(SignUpActivity.this, "Kayıt İşlemi başarılı", Toast.LENGTH_SHORT).show();
+                                                    } else {
+                                                        Toast.makeText(SignUpActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                                    }
                                                 }
-                                            }
-                                        });
+                                            });
+
+                                } else if (email.endsWith("@yildiz.edu.tr")) {
+                                    Instructor instructor = new Instructor();
+                                    instructor.setName(name);
+                                    instructor.setSurname(surname);
+                                    instructor.setEmail(email);
+                                    instructor.setPhone(phone);
+                                    instructor.setUserId(userId);
+
+                                    // E-mail adresini uygun bir düğüm adı yapmak için formatlama
+                                    String formattedEmail = email.replace(".", "_").replace("@", "_at_");
+
+                                    mReference.child("Öğretmenler").child(formattedEmail)
+                                            .setValue(instructor)
+                                            .addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()){
+                                                        Toast.makeText(SignUpActivity.this, "Kayıt İşlemi başarılı", Toast.LENGTH_SHORT).show();
+                                                    } else {
+                                                        Toast.makeText(SignUpActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                                    }
+
+                                                }
+                                            });
+
+                                } else {
+                                    Toast.makeText(SignUpActivity.this, "Geçersiz email domaini", Toast.LENGTH_SHORT).show();
+                                }
 
                                 Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
                                 startActivity(intent);
-                            }else {
+                            } else {
                                 Toast.makeText(SignUpActivity.this, "Kayıt işlemi başarısız", Toast.LENGTH_SHORT).show();
                             }
-
                         }
                     });
-        }else{
-            Toast.makeText(this, "Email Ve Şifre Boş Olamaz", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Email ve şifre boş olamaz", Toast.LENGTH_SHORT).show();
         }
     }
+
     public void login(View v){
         startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
         finish();
-    };
+    }
 }
