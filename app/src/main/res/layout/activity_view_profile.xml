@@ -201,4 +201,43 @@
                 app:cornerRadius="20dp"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btnClasroom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Classroom"
+            android:textSize="13sp"/>
+
+
+        <Button
+            android:id="@+id/btnQA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Q/A"
+            android:textSize="13sp"/>
+
+        <Button
+            android:id="@+id/btnPQ"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Poll"
+            android:textSize="13sp"/>
+
+        <Button
+            android:id="@+id/btnAttandance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Attandance"
+            android:textSize="13sp"/>
+    </LinearLayout>
+
 </LinearLayout>
