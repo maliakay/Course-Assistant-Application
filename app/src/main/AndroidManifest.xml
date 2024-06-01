@@ -2,9 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-feature
-        android:name="android.hardware.telephony"
-        android:required="false" />
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -16,6 +13,12 @@
         android:theme="@style/Theme.CourseAssistantApplication"
         tools:targetApi="31">
         <activity
+            android:name=".activity.AddCourseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.SignUpActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.ViewProfileActivity"
             android:exported="false" />
         <activity
@@ -25,10 +28,11 @@
             android:name=".activity.ForgetPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.SignUpActivity"
-            android:exported="false" />
-        <activity
             android:name=".activity.LoginActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.MyCoursesTeacherActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,8 +41,5 @@
             </intent-filter>
         </activity>
     </application>
-    <!-- Telefon araması için gerekli izin -->
-    <uses-permission android:name="android.permission.CALL_PHONE" />
-    <!-- İnternet erişimi için gerekli izin -->
-    <uses-permission android:name="android.permission.INTERNET" />
+
 </manifest>
