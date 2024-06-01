@@ -2,6 +2,9 @@ package com.example.courseassistantapplication.model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Course {
     private String courseId;
@@ -11,24 +14,9 @@ public class Course {
     private String completionStatus;
     private int getNumberOfStudents;
     private String emailOfInstructor;
-    private ArrayList<Group> courseGroups;
+    private List<Group> courseGroups;
 
-
-    public void addGrouptoCourse(Group group){
-        // 1. Check if instructors is null (initialize if it is)
-        if (courseGroups == null) {
-            courseGroups = new ArrayList<Group>();
-        }
-        // 2. Add the new element to the ArrayList
-        courseGroups.add(group);
-    }
-
-    public ArrayList<Group> getCourseGroups() {
-        return courseGroups;
-    }
-
-    public void setCourseGroups(ArrayList<Group> courseGroups) {
-        this.courseGroups = courseGroups;
+    public Course() {
     }
 
     public String getCourseId() {
@@ -85,5 +73,34 @@ public class Course {
 
     public void setEmailOfInstructor(String emailOfInstructor) {
         this.emailOfInstructor = emailOfInstructor;
+    }
+
+    public List<Group> getCourseGroups() {
+        return courseGroups;
+    }
+
+    public void setCourseGroups(List<Group> courseGroups) {
+        this.courseGroups = courseGroups;
+    }
+
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("courseId", courseId);
+        result.put("courseName", courseName);
+        result.put("date", date); // store date as timestamp
+        result.put("numberOfGroups", numberOfGroups);
+        result.put("completionStatus", completionStatus);
+        result.put("getNumberOfStudents", getNumberOfStudents);
+        result.put("emailOfInstructor", emailOfInstructor);
+
+        ArrayList<Map<String, Object>> groupMaps = new ArrayList<>();
+        if (courseGroups != null) {
+            for (Group group : courseGroups) {
+                groupMaps.add(group.toMap());
+            }
+        }
+        result.put("courseGroups", groupMaps);
+
+        return result;
     }
 }
