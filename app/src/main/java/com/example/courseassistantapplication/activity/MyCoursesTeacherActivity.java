@@ -25,7 +25,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
-
+//Öğrenci de Öğretmen de tek aktiviteden dersleri görüyor. Dosya ismi güncellencek
+//Eğitmenler dersi düzenleyip hali hazırda olan kaydı güncellemeli.
+//Öğrenciler derse katılma durumu değerlendirilmeli
+//kurgusal olarak değişiklik yapılabilr. eycii
 public class MyCoursesTeacherActivity extends AppCompatActivity {
     // EĞİTMENLERİN KURSLARINI GÖRÜNTÜLEDİĞİ YER
     private FirebaseAuth mAuth;
@@ -59,6 +62,9 @@ public class MyCoursesTeacherActivity extends AppCompatActivity {
             String currentUserEmail = mUser.getEmail();
             if (currentUserEmail != null && currentUserEmail.endsWith("@std.yildiz.edu.tr")) {
                 addCourseBtn.setVisibility(View.GONE);
+                loadStudentCourses(currentUserEmail);
+            }else{
+                loadTeacherCourses();
             }
         } else {
             // User is not logged in, redirect to login activity
@@ -69,7 +75,6 @@ public class MyCoursesTeacherActivity extends AppCompatActivity {
         }
 
         // Load teacher's courses from Firebase
-        loadTeacherCourses();
     }
 
     public void addCourse(View view) {
@@ -116,6 +121,35 @@ public class MyCoursesTeacherActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(MyCoursesTeacherActivity.this, "Failed to load courses.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void loadStudentCourses(String studentEmail) {
+        mReference.child("Dersler").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                courseList.clear();
+                for (DataSnapshot courseSnapshot : dataSnapshot.getChildren()) {
+                    Course course = courseSnapshot.getValue(Course.class);
+                    if (course != null && course.getCourseGroups() != null) {
+                        for (DataSnapshot groupSnapshot : courseSnapshot.child("courseGroups").getChildren()) {
+                            for (DataSnapshot studentSnapshot : groupSnapshot.child("Kayıtlı Öğrenciler").getChildren()) {
+                                String registeredStudentEmail = studentSnapshot.getValue(String.class);
+                                if (registeredStudentEmail.equals(studentEmail)) {
+                                    courseList.add(course);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(MyCoursesTeacherActivity.this, "Failed to load student courses.", Toast.LENGTH_SHORT).show();
             }
         });
     }
