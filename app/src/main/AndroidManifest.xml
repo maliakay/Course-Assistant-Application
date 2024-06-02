@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -14,6 +15,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CourseAssistantApplication"
         tools:targetApi="31">
+
+        <activity
+            android:name=".activity.AddCourseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.SignUpActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.AddStudentActivity"
+            android:exported="false" />
         <activity
             android:name=".activity.CreateNewReport"
             android:exported="false" />
@@ -30,10 +41,13 @@
             android:name=".activity.ForgetPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.LoginActivity"
+            android:name=".activity.MyCoursesTeacherActivity"
             android:exported="false" />
         <activity
             android:name=".activity.ViewProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

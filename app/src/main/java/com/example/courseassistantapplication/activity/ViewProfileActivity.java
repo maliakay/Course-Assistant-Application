@@ -29,7 +29,7 @@ public class ViewProfileActivity extends AppCompatActivity {
     private FirebaseUser mUser;
     private DatabaseReference mReference;
 
-    TextView name, surname, studentIDLabel, studentID, phoneNumber, education, mail, educationLabel, user;
+    TextView name, surname, studentIDLabel, studentID, phoneNumber, education, mail, educationLabel, user, showCourses_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +41,8 @@ public class ViewProfileActivity extends AppCompatActivity {
         surname = findViewById(R.id.surname);
         studentIDLabel = findViewById(R.id.studentIDLabel);
         studentID = findViewById(R.id.studentID);
+
+
         phoneNumber = findViewById(R.id.phoneNumber);
         education = findViewById(R.id.education);
         educationLabel = findViewById(R.id.educationLabel);
@@ -167,5 +169,10 @@ public class ViewProfileActivity extends AppCompatActivity {
 
     public void listReports(View v){
         startActivity(new Intent(ViewProfileActivity.this, ListReportsActivity.class));
+    }
+
+    public void showCourses(View view){
+        startActivity(new Intent(ViewProfileActivity.this, MyCoursesTeacherActivity.class));
+        finish();
     }
 }
