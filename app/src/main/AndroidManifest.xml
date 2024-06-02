@@ -12,7 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CourseAssistantApplication"
         tools:targetApi="31">
-
+        <activity
+            android:name=".activity.TakePollActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.ShowPollsStdActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.AddPollsActivity"
+            android:exported="false" />
         <activity
             android:name=".activity.AddCourseActivity"
             android:exported="false" />
@@ -22,21 +30,18 @@
         <activity
             android:name=".activity.AddStudentActivity"
             android:exported="false" />
-
         <activity
             android:name=".activity.ViewProfileActivity"
             android:exported="false" />
         <activity
             android:name=".activity.UpdateProfileActivity"
             android:exported="false" />
-
         <activity
             android:name=".activity.ForgetPasswordActivity"
             android:exported="false" />
         <activity
             android:name=".activity.MyCoursesTeacherActivity"
             android:exported="false" />
-
         <activity
             android:name=".activity.LoginActivity"
             android:exported="true">

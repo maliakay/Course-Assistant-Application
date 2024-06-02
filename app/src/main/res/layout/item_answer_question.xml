@@ -1,0 +1,20 @@
+<!-- res/layout/item_question_spinner.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/textViewQuestion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Soru"
+        android:textSize="16sp"
+        android:padding="8dp" />
+
+    <Spinner
+        android:id="@+id/spinnerAnswer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>
