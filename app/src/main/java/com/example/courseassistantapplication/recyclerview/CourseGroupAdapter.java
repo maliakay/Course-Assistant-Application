@@ -46,24 +46,34 @@ public class CourseGroupAdapter extends RecyclerView.Adapter<CourseGroupAdapter.
         holder.courseId.setText(course.getCourseId());
         holder.courseDate.setText(course.getDate());
         String x = null;
-        // Display the groups for the course
-        if (mUser != null && mUser.getEmail() != null && course.getEmailOfInstructor().equals(mUser.getEmail())) {
-            holder.groupNumbers.setText("owner");
-        } else {
-            StringBuilder groupNumbers = new StringBuilder();
-            for (Group group : course.getCourseGroups()) {
-                groupNumbers.append(group.getGroupNumber()).append("\n");
-                x = group.getGroupNumber();
-            }
-            holder.groupNumbers.setText(groupNumbers.toString().trim());
+        StringBuilder groupNumbers = new StringBuilder();
+        for (Group group : course.getCourseGroups()) {
+            groupNumbers.append(group.getGroupNumber()).append("\n");
+            x = group.getGroupNumber();
         }
-        String finalX = x;
-        holder.btn_add_student.setOnClickListener(v -> {
-            Intent intent = new Intent(context, AddStudentActivity.class);
-            intent.putExtra("courseId", course.getCourseId());
-            intent.putExtra("groupNumber", finalX);
-            context.startActivity(intent);
-        });
+
+        if (!(mUser.getEmail().endsWith("@std.yildiz.edu.tr"))){
+            // Display the groups for the course
+            if (mUser.getEmail() != null && course.getEmailOfInstructor().equals(mUser.getEmail())) {
+                holder.groupNumbers.setText("owner");
+            }
+            else {
+                holder.groupNumbers.setText(groupNumbers.toString().trim());
+            }
+
+            String finalX = x;
+            holder.btn_add_student.setOnClickListener(v -> {
+                Intent intent = new Intent(context, AddStudentActivity.class);
+                intent.putExtra("courseId", course.getCourseId());
+                intent.putExtra("groupNumber", finalX);
+                context.startActivity(intent);
+            });
+        }
+        else{
+            holder.groupNumbers.setText(x);
+            holder.btn_add_student.setVisibility(View.GONE); // Öğrenci ise butonu gizle
+        }
+
     }
 
     @Override

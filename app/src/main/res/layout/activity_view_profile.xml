@@ -8,7 +8,9 @@
     android:orientation="vertical"
     android:gravity="center"
     tools:context=".activity.ViewProfileActivity">
-
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -211,4 +213,5 @@
                 app:cornerRadius="20dp"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+    </ScrollView>
 </LinearLayout>
