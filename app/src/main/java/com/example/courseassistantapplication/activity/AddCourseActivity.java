@@ -114,18 +114,15 @@ public class AddCourseActivity extends AppCompatActivity {
             }
         });
 
-        // Create course button listener
-        create_course_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createCourse();
-                startActivity(new Intent(AddCourseActivity.this,MyCoursesTeacherActivity.class));
-                finish();
-            }
-        });
+
 
         // Load instructors from Firebase
         loadInstructors();
+    }
+    public void update(View v) {
+        createCourse();
+        startActivity(new Intent(AddCourseActivity.this,MyCoursesTeacherActivity.class));
+        finish();
     }
 
     private DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
