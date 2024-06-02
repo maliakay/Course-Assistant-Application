@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class AddCourseActivity extends AppCompatActivity {
-
+// KURS EKLE
     private FirebaseAuth mAuth;
     private DatabaseReference mReference;
     private FirebaseUser mUser;
@@ -56,15 +56,9 @@ public class AddCourseActivity extends AppCompatActivity {
         // Firebase auth and database reference initialization
         mAuth = FirebaseAuth.getInstance();
         mReference = FirebaseDatabase.getInstance().getReference();
-        //mUser = mAuth.getCurrentUser();
+        mUser = mAuth.getCurrentUser();
 
-        // Kullanıcı oturum açmamışsa oturum açma ekranına yönlendir
-        /*if (mUser == null) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-            finish();
-            return;
-        }*/
+
 
         // View bindings
         course_id = findViewById(R.id.course_id);
@@ -125,6 +119,8 @@ public class AddCourseActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 createCourse();
+                startActivity(new Intent(AddCourseActivity.this,MyCoursesTeacherActivity.class));
+                finish();
             }
         });
 
@@ -179,15 +175,13 @@ public class AddCourseActivity extends AppCompatActivity {
         String courseId = course_id.getText().toString().trim();
         String courseName = course_name.getText().toString().trim();
         String courseDateStr = course_date.getText().toString().trim();
-        //String currentUserEmail = mUser.getEmail();
+        String currentUserEmail = mUser.getEmail();
 
         if (courseId.isEmpty() || courseName.isEmpty() || courseDateStr.isEmpty() || groupList.isEmpty()) {
             Toast.makeText(this, "Please fill all fields and add at least one group.", Toast.LENGTH_SHORT).show();
             return;
         }
-        //String currentUserEmailKey = currentUserEmail.replace(".", ",");
-
-
+        String currentUserEmailKey = currentUserEmail.replace(".", "_").replace("@", "_at_");
 
         // Create the course object
         Course course = new Course();
@@ -195,51 +189,33 @@ public class AddCourseActivity extends AppCompatActivity {
         course.setCourseName(courseName);
         course.setDate(courseDateStr);
         course.setNumberOfGroups(groupList.size());
-        //course.setEmailOfInstructor(currentUserEmail);
+        course.setEmailOfInstructor(currentUserEmail);
         course.setCourseGroups(groupList);
-        List <String> instructors;
 
         mReference.child("Dersler").child(courseId).setValue(course.toMap()).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
+                mReference.child("Öğretmenler").child(currentUserEmailKey).child("Dersler").child(courseId).setValue("Owner");
 
-                for(Group group:groupList){
-                    String instructorEmailKey = group.getInstructorEmail().replace(".", "_");
-                    instructorEmailKey = instructorEmailKey.replace("@","_at_");
-                    DatabaseReference teacherCoursesRef = mReference.child("Öğretmenler").child(instructorEmailKey).child("Dersler");
-                    teacherCoursesRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            List<String> currentCourses = new ArrayList<>();
-                            if (snapshot.exists()) {
-                                for (DataSnapshot courseSnapshot : snapshot.getChildren()) {
-                                    currentCourses.add(courseSnapshot.getValue(String.class));
-                                }
-                            }
-                            if (!currentCourses.contains(courseId)) {
-                                currentCourses.add(courseId);
-                            }
+                for(Group group : groupList) {
 
-                            // Update the courses list of the teacher
-                            teacherCoursesRef.setValue(currentCourses).addOnCompleteListener(teacherTask -> {
-                                if (teacherTask.isSuccessful()) {
-                                    Toast.makeText(AddCourseActivity.this, "Course created successfully.", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(AddCourseActivity.this, "Failed to add course to teacher's list.", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                        //diğer gruba atanan hocanın yapısına eklenmedi kurs
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                            Toast.makeText(AddCourseActivity.this, "Failed to fetch teacher's courses.", Toast.LENGTH_SHORT).show();
+                    String instructorEmailKey = group.getInstructorEmail().replace(".", "_").replace("@", "_at_");
+
+                    DatabaseReference teacherCoursesRef = mReference.child("Öğretmenler").child(instructorEmailKey).child("Dersler").child(courseId).child("Grup Numarası");
+
+                    teacherCoursesRef.setValue(group.getGroupNumber()).addOnCompleteListener(teacherTask -> {
+                        if (teacherTask.isSuccessful()) {
+                            Toast.makeText(AddCourseActivity.this, "Course created successfully.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(AddCourseActivity.this, "Failed to add course to teacher's list.", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
-                // Get the current courses list of the teacher
 
             } else {
                 Toast.makeText(AddCourseActivity.this, "Failed to create course.", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
+
 }

@@ -1,5 +1,4 @@
 package com.example.courseassistantapplication.recyclerview;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,18 +10,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.courseassistantapplication.R;
 import com.example.courseassistantapplication.model.Course;
 import com.example.courseassistantapplication.model.Group;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class CourseGroupAdapter extends RecyclerView.Adapter<CourseGroupAdapter.CourseGroupViewHolder> {
-
     private List<Course> courseList;
+    private FirebaseUser currentUser;
 
     public CourseGroupAdapter(List<Course> courseList) {
         this.courseList = courseList;
+        this.currentUser = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     @NonNull
@@ -40,9 +39,15 @@ public class CourseGroupAdapter extends RecyclerView.Adapter<CourseGroupAdapter.
         holder.courseId.setText(course.getCourseId());
         holder.courseDate.setText(course.getDate());
 
-        // Display the groups for the course
-        for (Group group : course.getCourseGroups()) {
-            holder.groupNumbers.setText(group.getGroupNumber());
+        // Check if the current user is the instructor of the course
+        if (course.getEmailOfInstructor().equals(currentUser.getEmail())) {
+            holder.groupNumbers.setText("owner");
+        } else {
+            StringBuilder groupNumbers = new StringBuilder();
+            for (Group group : course.getCourseGroups()) {
+                groupNumbers.append(group.getGroupNumber()).append("\n");
+            }
+            holder.groupNumbers.setText(groupNumbers.toString().trim());
         }
     }
 
@@ -64,3 +69,4 @@ public class CourseGroupAdapter extends RecyclerView.Adapter<CourseGroupAdapter.
         }
     }
 }
+

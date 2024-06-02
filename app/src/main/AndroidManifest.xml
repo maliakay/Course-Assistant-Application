@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CourseAssistantApplication"
         tools:targetApi="31">
+
         <activity
             android:name=".activity.AddCourseActivity"
             android:exported="false" />
@@ -24,6 +25,15 @@
         <activity
             android:name=".activity.UpdateProfileActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".activity.MyCoursesTeacherActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.AddCourseActivity"
+            android:exported="false" />
+
         <activity
             android:name=".activity.ForgetPasswordActivity"
             android:exported="false" />
