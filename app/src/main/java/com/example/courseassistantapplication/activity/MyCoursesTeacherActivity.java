@@ -1,6 +1,9 @@
 package com.example.courseassistantapplication.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,9 +27,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MyCoursesTeacherActivity extends AppCompatActivity {
-
+    // EĞİTMENLERİN KURSLARINI GÖRÜNTÜLEDİĞİ YER
     private FirebaseAuth mAuth;
     private DatabaseReference mReference;
+    private Button addCourseBtn;
     private FirebaseUser mUser;
     private RecyclerView recyclerView;
     private CourseGroupAdapter adapter;
@@ -40,20 +44,48 @@ public class MyCoursesTeacherActivity extends AppCompatActivity {
         // Firebase auth and database reference initialization
         mAuth = FirebaseAuth.getInstance();
         mReference = FirebaseDatabase.getInstance().getReference();
+        mUser = mAuth.getCurrentUser();
 
-        // Initialize RecyclerView
+        // View bindings
+        addCourseBtn = findViewById(R.id.add_course);
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         courseList = new ArrayList<>();
         adapter = new CourseGroupAdapter(courseList);
         recyclerView.setAdapter(adapter);
 
+        // Check if the user's email ends with "@std.yildiz.edu.tr"
+        if (mUser != null) {
+            String currentUserEmail = mUser.getEmail();
+            if (currentUserEmail != null && currentUserEmail.endsWith("@std.yildiz.edu.tr")) {
+                addCourseBtn.setVisibility(View.GONE);
+            }
+        } else {
+            // User is not logged in, redirect to login activity
+            Toast.makeText(this, "User not logged in. Redirecting to login...", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(MyCoursesTeacherActivity.this, LoginActivity.class));
+            finish();
+            return;
+        }
+
         // Load teacher's courses from Firebase
         loadTeacherCourses();
     }
 
+    public void addCourse(View view) {
+        startActivity(new Intent(MyCoursesTeacherActivity.this, AddCourseActivity.class));
+        finish();
+    }
+
     private void loadTeacherCourses() {
-        String currentUserEmail = "eray@yildiz.edu.tr";
+        if (mUser == null) {
+            return; // User not logged in
+        }
+
+        String currentUserEmail = mUser.getEmail();
+        if (currentUserEmail == null) {
+            return; // Email not available
+        }
 
         mReference.child("Dersler").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -62,6 +94,9 @@ public class MyCoursesTeacherActivity extends AppCompatActivity {
                 for (DataSnapshot courseSnapshot : dataSnapshot.getChildren()) {
                     Course course = courseSnapshot.getValue(Course.class);
                     if (course != null && course.getCourseGroups() != null) {
+                        if (course.getEmailOfInstructor().equals(currentUserEmail)) {
+                            courseList.add(course);
+                        }
                         List<Group> filteredGroups = new ArrayList<>();
                         for (DataSnapshot groupSnapshot : courseSnapshot.child("courseGroups").getChildren()) {
                             Group group = groupSnapshot.getValue(Group.class);
