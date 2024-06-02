@@ -166,9 +166,13 @@ public class ViewProfileActivity extends AppCompatActivity {
         }
     }
 
+
+    public void listReports(View v){
+        startActivity(new Intent(ViewProfileActivity.this, ListReportsActivity.class));
+    }
+
     public void showCourses(View view){
         startActivity(new Intent(ViewProfileActivity.this, MyCoursesTeacherActivity.class));
         finish();
     }
-
 }
