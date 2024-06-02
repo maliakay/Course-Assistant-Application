@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".activity.StartAttandenceActivity">
+
+    <Button
+        android:layout_marginTop="60dp"
+        android:id="@+id/btnStartAttendance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Attendance" />
+    <Button
+        android:layout_marginTop="60dp"
+        android:id="@+id/btnStopAttendance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stop Attendance" />
+    <Button
+        android:layout_marginTop="60dp"
+        android:id="@+id/btnGoJoin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="go to join" />
+
+
+
+</LinearLayout>
