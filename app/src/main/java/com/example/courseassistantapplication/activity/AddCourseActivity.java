@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class AddCourseActivity extends AppCompatActivity {
-// KURS EKLE
+
     private FirebaseAuth mAuth;
     private DatabaseReference mReference;
     private FirebaseUser mUser;
@@ -213,6 +213,5 @@ public class AddCourseActivity extends AppCompatActivity {
             }
         });
     }
-
 
 }
