@@ -45,7 +45,7 @@ public class MyCoursesTeacherActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         courseList = new ArrayList<>();
-        adapter = new CourseGroupAdapter(courseList);
+        adapter = new CourseGroupAdapter(courseList,this);
         recyclerView.setAdapter(adapter);
 
         // Load teacher's courses from Firebase
@@ -53,7 +53,7 @@ public class MyCoursesTeacherActivity extends AppCompatActivity {
     }
 
     private void loadTeacherCourses() {
-        String currentUserEmail = "eray@yildiz.edu.tr";
+        String currentUserEmail = "sena@yildiz.edu.tr";
 
         mReference.child("Dersler").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

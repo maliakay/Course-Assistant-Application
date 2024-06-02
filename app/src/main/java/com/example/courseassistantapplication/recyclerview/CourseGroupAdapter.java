@@ -1,14 +1,18 @@
 package com.example.courseassistantapplication.recyclerview;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.courseassistantapplication.R;
+import com.example.courseassistantapplication.activity.AddStudentActivity;
 import com.example.courseassistantapplication.model.Course;
 import com.example.courseassistantapplication.model.Group;
 
@@ -20,9 +24,11 @@ import java.util.Locale;
 public class CourseGroupAdapter extends RecyclerView.Adapter<CourseGroupAdapter.CourseGroupViewHolder> {
 
     private List<Course> courseList;
+    private Context context;
 
-    public CourseGroupAdapter(List<Course> courseList) {
+    public CourseGroupAdapter(List<Course> courseList,Context context) {
         this.courseList = courseList;
+        this.context = context;
     }
 
     @NonNull
@@ -39,11 +45,19 @@ public class CourseGroupAdapter extends RecyclerView.Adapter<CourseGroupAdapter.
         holder.courseName.setText(course.getCourseName());
         holder.courseId.setText(course.getCourseId());
         holder.courseDate.setText(course.getDate());
-
+        String x = null;
         // Display the groups for the course
         for (Group group : course.getCourseGroups()) {
             holder.groupNumbers.setText(group.getGroupNumber());
+             x = group.getGroupNumber();
         }
+        String finalX = x;
+        holder.btn_add_student.setOnClickListener(v -> {
+            Intent intent = new Intent(context, AddStudentActivity.class);
+            intent.putExtra("courseId", course.getCourseId());
+            intent.putExtra("groupNumber", finalX);
+            context.startActivity(intent);
+        });
     }
 
     @Override
@@ -54,6 +68,7 @@ public class CourseGroupAdapter extends RecyclerView.Adapter<CourseGroupAdapter.
     public static class CourseGroupViewHolder extends RecyclerView.ViewHolder {
 
         TextView courseName, courseId, courseDate, groupNumbers;
+        Button btn_add_student;
 
         public CourseGroupViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -61,6 +76,8 @@ public class CourseGroupAdapter extends RecyclerView.Adapter<CourseGroupAdapter.
             courseId = itemView.findViewById(R.id.course_id);
             courseDate = itemView.findViewById(R.id.course_date);
             groupNumbers = itemView.findViewById(R.id.group_numbers);
+            btn_add_student = itemView.findViewById(R.id.btn_add_student);
+
         }
     }
 }
