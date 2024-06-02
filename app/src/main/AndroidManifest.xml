@@ -29,9 +29,6 @@
             android:name=".activity.CreateNewReport"
             android:exported="false" />
         <activity
-            android:name=".activity.SignUpActivity"
-            android:exported="false" />
-        <activity
             android:name=".activity.ListReportsActivity"
             android:exported="false" />
         <activity
