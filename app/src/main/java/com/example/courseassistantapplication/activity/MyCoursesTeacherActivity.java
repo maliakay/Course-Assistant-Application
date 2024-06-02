@@ -1,6 +1,9 @@
 package com.example.courseassistantapplication.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,8 +32,6 @@ public class MyCoursesTeacherActivity extends AppCompatActivity {
     private DatabaseReference mReference;
     private Button addCourseBtn;
 
-    private FirebaseAuth mAuth;
-    private DatabaseReference mReference;
     private FirebaseUser mUser;
     private RecyclerView recyclerView;
     private CourseGroupAdapter adapter;
@@ -51,7 +52,7 @@ public class MyCoursesTeacherActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         courseList = new ArrayList<>();
-        adapter = new CourseGroupAdapter(courseList);
+        adapter = new CourseGroupAdapter(courseList, this, mUser);
         recyclerView.setAdapter(adapter);
 
         // Check if the user's email ends with "@std.yildiz.edu.tr"
@@ -68,14 +69,6 @@ public class MyCoursesTeacherActivity extends AppCompatActivity {
             return;
         }
 
-
-        // Initialize RecyclerView
-        recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        courseList = new ArrayList<>();
-        adapter = new CourseGroupAdapter(courseList,this);
-        recyclerView.setAdapter(adapter);
-
         // Load teacher's courses from Firebase
         loadTeacherCourses();
     }
@@ -87,15 +80,15 @@ public class MyCoursesTeacherActivity extends AppCompatActivity {
 
     private void loadTeacherCourses() {
         if (mUser == null) {
-            return; // User not logged in
+            Toast.makeText(MyCoursesTeacherActivity.this, "User not logged in.", Toast.LENGTH_SHORT).show();
+            return;
         }
 
         String currentUserEmail = mUser.getEmail();
         if (currentUserEmail == null) {
-            return; // Email not available
+            Toast.makeText(MyCoursesTeacherActivity.this, "Email not available.", Toast.LENGTH_SHORT).show();
+            return;
         }
-    private void loadTeacherCourses() {
-        String currentUserEmail = "sena@yildiz.edu.tr";
 
         mReference.child("Dersler").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -106,17 +99,18 @@ public class MyCoursesTeacherActivity extends AppCompatActivity {
                     if (course != null && course.getCourseGroups() != null) {
                         if (course.getEmailOfInstructor().equals(currentUserEmail)) {
                             courseList.add(course);
-                        }
-                        List<Group> filteredGroups = new ArrayList<>();
-                        for (DataSnapshot groupSnapshot : courseSnapshot.child("courseGroups").getChildren()) {
-                            Group group = groupSnapshot.getValue(Group.class);
-                            if (group != null && group.getInstructorEmail().equals(currentUserEmail)) {
-                                filteredGroups.add(group);
+                        } else {
+                            List<Group> filteredGroups = new ArrayList<>();
+                            for (DataSnapshot groupSnapshot : courseSnapshot.child("courseGroups").getChildren()) {
+                                Group group = groupSnapshot.getValue(Group.class);
+                                if (group != null && group.getInstructorEmail().equals(currentUserEmail)) {
+                                    filteredGroups.add(group);
+                                }
                             }
-                        }
-                        if (!filteredGroups.isEmpty()) {
-                            course.setCourseGroups(filteredGroups);
-                            courseList.add(course);
+                            if (!filteredGroups.isEmpty()) {
+                                course.setCourseGroups(filteredGroups);
+                                courseList.add(course);
+                            }
                         }
                     }
                 }
