@@ -173,6 +173,5 @@ public class ViewProfileActivity extends AppCompatActivity {
 
     public void showCourses(View view){
         startActivity(new Intent(ViewProfileActivity.this, MyCoursesTeacherActivity.class));
-        finish();
     }
 }
