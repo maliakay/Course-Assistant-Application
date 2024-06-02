@@ -1,9 +1,6 @@
 package com.example.courseassistantapplication.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,6 +28,9 @@ public class MyCoursesTeacherActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference mReference;
     private Button addCourseBtn;
+
+    private FirebaseAuth mAuth;
+    private DatabaseReference mReference;
     private FirebaseUser mUser;
     private RecyclerView recyclerView;
     private CourseGroupAdapter adapter;
@@ -68,6 +68,14 @@ public class MyCoursesTeacherActivity extends AppCompatActivity {
             return;
         }
 
+
+        // Initialize RecyclerView
+        recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        courseList = new ArrayList<>();
+        adapter = new CourseGroupAdapter(courseList,this);
+        recyclerView.setAdapter(adapter);
+
         // Load teacher's courses from Firebase
         loadTeacherCourses();
     }
@@ -86,6 +94,8 @@ public class MyCoursesTeacherActivity extends AppCompatActivity {
         if (currentUserEmail == null) {
             return; // Email not available
         }
+    private void loadTeacherCourses() {
+        String currentUserEmail = "sena@yildiz.edu.tr";
 
         mReference.child("Dersler").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

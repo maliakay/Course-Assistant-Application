@@ -20,6 +20,15 @@
             android:name=".activity.SignUpActivity"
             android:exported="false" />
         <activity
+            android:name=".activity.AddStudentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.AddCourseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.SignUpActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.ViewProfileActivity"
             android:exported="false" />
         <activity
