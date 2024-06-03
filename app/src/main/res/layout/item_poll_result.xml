@@ -1,6 +1,7 @@
 <!-- res/layout/item_poll_result.xml -->
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
@@ -22,19 +23,12 @@
             android:textStyle="bold"
             android:paddingBottom="8dp" />
 
-        <TextView
-            android:id="@+id/textViewQuestion"
+        <LinearLayout
+            android:id="@+id/chartContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Soru"
-            android:textSize="16sp"
-            android:paddingBottom="8dp" />
-
-        <TextView
-            android:id="@+id/textViewResults"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sonuçlar"
-            android:textSize="14sp" />
+            android:orientation="vertical"
+            android:paddingTop="16dp" />
     </LinearLayout>
+
 </androidx.cardview.widget.CardView>
