@@ -52,13 +52,27 @@
                 android:id="@+id/btn_add_student"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add Student" />
+                android:text="Add Student"
+                android:backgroundTint="@color/black"/>
 
             <Button
                 android:id="@+id/btn_add_poll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add Poll" />
+                android:text="Add Poll"
+                android:backgroundTint="@color/black"/>
+            <Button
+                android:id="@+id/btn_create_exam"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Creat Exam"
+                android:backgroundTint="@color/black"/>
+            <Button
+                android:id="@+id/show_responses_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Show Responses"
+                android:backgroundTint="@color/black"/>
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
