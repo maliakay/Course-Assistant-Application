@@ -5,6 +5,7 @@ import static java.lang.Math.abs;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -41,6 +42,8 @@ public class JoinAttendanceActivity extends AppCompatActivity {
     private FusedLocationProviderClient fusedLocationClient;
     private DatabaseReference mReference;
     private Button btnStartAttendance;
+    private String courseID;
+    private String userMail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,16 +56,22 @@ public class JoinAttendanceActivity extends AppCompatActivity {
         mReference = FirebaseDatabase.getInstance().getReference("yoklama");
         btnStartAttendance = findViewById(R.id.btnJoinAttendance);
 
+        // Retrieve the data from the intent
+        Intent intent = getIntent();
+        if (intent != null) {
+            courseID = intent.getStringExtra("courseId");
+            userMail = intent.getStringExtra("userMail");
+        }
 
         btnStartAttendance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mReference.child("BLM3131").child("katılan öğrenciler").addListenerForSingleValueEvent(new ValueEventListener() {
+                mReference.child(courseID).child("katılan öğrenciler").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         boolean isAlreadyAttend = false;
                         for (DataSnapshot childSnapshot : snapshot.getChildren()){
-                            if ( childSnapshot.getValue().equals("emir.ozturk1@std.yildiz.edu.tr") ){
+                            if ( childSnapshot.getValue().equals(userMail) ){
                                 Toast.makeText(JoinAttendanceActivity.this, "Yoklamada kaydınız bulunmakta", Toast.LENGTH_SHORT).show();
                                 isAlreadyAttend = true;
                             }
@@ -153,12 +162,12 @@ public class JoinAttendanceActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot childSnapshot : snapshot.getChildren()) {
-                    if(childSnapshot.getKey().equals("BLM3131")){
+                    if(childSnapshot.getKey().equals(courseID)){
                         MyLocation instructorLocation = childSnapshot.child("konum").getValue(MyLocation.class);
                         Log.d("lokasyon", String.valueOf(instructorLocation.distanceTo(location)) +" "+ String.valueOf(abs(location.getAltitude()-instructorLocation.getAltitude())));
                         if(instructorLocation.distanceTo(location) < 20 &&
                                 abs(location.getAltitude()-instructorLocation.getAltitude()) < 3){
-                            mReference.child("BLM3131").child("katılan öğrenciler").push().setValue("emir.ozturk1@std.yildiz.edu.tr");
+                            mReference.child(courseID).child("katılan öğrenciler").push().setValue(userMail);
                             Toast.makeText(JoinAttendanceActivity.this, "Yoklamaya katıldın", Toast.LENGTH_SHORT).show();
                         }else{
                             //TODO snackbar koy tekrar katılmasını iste

@@ -5,9 +5,17 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context=".activity.StartAttendanceActivity">
+
+
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewAttandence"
+        android:layout_width="match_parent"
+        android:layout_height="600dp"/>
 
     <Button
         android:layout_marginTop="10dp"
@@ -15,24 +23,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Start Attendance" />
+
     <Button
         android:layout_marginTop="30dp"
         android:id="@+id/btnStopAttendance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Stop Attendance" />
-    <Button
-        android:layout_marginTop="30dp"
-        android:id="@+id/btnGoJoin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="go to join" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewAttandence"
-        android:layout_width="match_parent"
-        android:layout_height="400dp"/>
-
-
 
 </LinearLayout>

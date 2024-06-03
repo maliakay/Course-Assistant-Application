@@ -21,7 +21,18 @@
         <activity
             android:name=".activity.AdminMainActivity"
             android:exported="false" />
-
+        <activity
+            android:name=".activity.AddPollsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.PollResultsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.TakePollActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.ShowPollsStdActivity"
+            android:exported="false" />
         <activity
             android:name=".activity.JoinAttendanceActivity"
             android:exported="false" />
