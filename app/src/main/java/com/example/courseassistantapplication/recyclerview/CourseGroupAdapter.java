@@ -16,6 +16,7 @@ import com.example.courseassistantapplication.activity.AddPollsActivity;
 import com.example.courseassistantapplication.activity.AddStudentActivity;
 import com.example.courseassistantapplication.activity.CreateExamActivity;
 import com.example.courseassistantapplication.activity.ViewExamResponsesActivity;
+import com.example.courseassistantapplication.activity.PollResultsActivity;
 import com.example.courseassistantapplication.model.Course;
 import com.example.courseassistantapplication.model.Group;
 import com.google.firebase.auth.FirebaseUser;
@@ -82,6 +83,11 @@ public class CourseGroupAdapter extends RecyclerView.Adapter<CourseGroupAdapter.
                 intent.putExtra("courseId", course.getCourseId());
                 context.startActivity(intent);
             });
+            holder.btn_show_poll.setOnClickListener(v ->{
+                Intent intent = new Intent(context, PollResultsActivity.class);
+                intent.putExtra("courseId", course.getCourseId());
+                context.startActivity(intent);
+            });
             holder.btn_create_exam.setOnClickListener(v ->{
                 Intent intent = new Intent(context, CreateExamActivity.class);
                 intent.putExtra("courseId", course.getCourseId());
@@ -92,6 +98,7 @@ public class CourseGroupAdapter extends RecyclerView.Adapter<CourseGroupAdapter.
             holder.groupNumbers.setText(x);
             holder.btn_add_student.setVisibility(View.GONE);
             holder.btn_add_poll.setVisibility(View.GONE);
+            holder.btn_show_poll.setVisibility(View.GONE);// Öğrenci ise butonu gizle
             holder.btn_create_exam.setVisibility(View.GONE);
             holder.btn_show_responses.setVisibility(View.GONE);// Öğrenci ise butonu gizle
         }
@@ -106,7 +113,8 @@ public class CourseGroupAdapter extends RecyclerView.Adapter<CourseGroupAdapter.
     public static class CourseGroupViewHolder extends RecyclerView.ViewHolder {
 
         TextView courseName, courseId, courseDate, groupNumbers;
-        Button btn_add_student,btn_add_poll, btn_create_exam, btn_show_responses;
+        Button btn_add_student,btn_add_poll,btn_show_poll;
+        Button btn_create_exam, btn_show_responses;
 
         public CourseGroupViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -118,6 +126,8 @@ public class CourseGroupAdapter extends RecyclerView.Adapter<CourseGroupAdapter.
             btn_add_poll = itemView.findViewById(R.id.btn_add_poll);
             btn_create_exam  = itemView.findViewById(R.id.btn_create_exam);
             btn_show_responses = itemView.findViewById(R.id.show_responses_btn);
+            btn_show_poll = itemView.findViewById(R.id.btn_show_poll);
+
         }
     }
 }
