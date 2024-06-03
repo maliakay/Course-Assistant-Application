@@ -1,5 +1,5 @@
-<!-- item_course.xml -->
 <androidx.cardview.widget.CardView
+    android:id="@+id/cwRecycle"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"

@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.courseassistantapplication.R;
 import com.example.courseassistantapplication.model.Course;
 import com.example.courseassistantapplication.model.Group;
-import com.example.courseassistantapplication.recyclerview.CourseGroupAdapter;
+import com.example.courseassistantapplication.recyclerview.ClassNameAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -31,7 +31,7 @@ public class ViewClassesActivity extends AppCompatActivity {
 
     private FirebaseUser mUser;
     private RecyclerView recyclerView;
-    private CourseGroupAdapter adapter;
+    private ClassNameAdapter adapter;
     private List<Course> courseList;
 
     private List<Group> groupList;
@@ -48,8 +48,9 @@ public class ViewClassesActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.rwClasses);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         courseList = new ArrayList<>();
-        adapter = new CourseGroupAdapter(courseList, this, mUser);
+        adapter = new ClassNameAdapter(courseList, this, mUser);
         recyclerView.setAdapter(adapter);
+
 
         if (mUser != null) {
             String currentUserEmail = mUser.getEmail();

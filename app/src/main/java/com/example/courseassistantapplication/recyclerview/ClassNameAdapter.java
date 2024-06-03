@@ -20,12 +20,12 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
-public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.CourseViewHolder> {
+public class ClassNameAdapter extends RecyclerView.Adapter<ClassNameAdapter.ClassNameViewHolder> {
     private List<Course> courseList;
     private Context context;
     private FirebaseUser mUser;
 
-    public ClassAdapter(List<Course> courseList, Context context, FirebaseUser mUser) {
+    public ClassNameAdapter(List<Course> courseList, Context context, FirebaseUser mUser) {
         this.courseList = courseList;
         this.context = context;
         this.mUser = mUser;
@@ -33,18 +33,17 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.CourseViewHo
 
     @NonNull
     @Override
-    public CourseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ClassNameViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_classes, parent, false);
-        return new CourseViewHolder(view);
+        return new ClassNameViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CourseViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ClassNameViewHolder holder, int position) {
         Course course = courseList.get(position);
         holder.classCode.setText(course.getCourseId());
         holder.className.setText(course.getCourseName());
         holder.cardView.setOnClickListener(v -> {
-            Toast.makeText(context, "Card Clicked: " + course.getCourseName(), Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(context, ViewCourseSiteActivity.class);
             context.startActivity(intent);
         });
@@ -55,15 +54,15 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.CourseViewHo
         return courseList.size();
     }
 
-    public static class CourseViewHolder extends RecyclerView.ViewHolder {
+    public static class ClassNameViewHolder extends RecyclerView.ViewHolder {
         TextView classCode, className;
         CardView cardView;
 
-        public CourseViewHolder(@NonNull View itemView) {
+        public ClassNameViewHolder(@NonNull View itemView) {
             super(itemView);
             classCode = itemView.findViewById(R.id.tvClassCode);
             className = itemView.findViewById(R.id.tvClassName);
-            cardView = itemView.findViewById(R.id.rwClasses);
+            cardView = itemView.findViewById(R.id.cwRecycle);
         }
     }
 }
