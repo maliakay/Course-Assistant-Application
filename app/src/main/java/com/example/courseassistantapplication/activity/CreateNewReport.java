@@ -81,7 +81,6 @@ public class CreateNewReport extends AppCompatActivity {
                                recipient = "Akademisyen mailine ulaşılamıyor";
                            }
                         }else{
-                            //Admin seçilmiş
                             recipient = "emirozturk46@outlook.com";
                         }
                     }
