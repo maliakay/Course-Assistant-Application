@@ -12,7 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.courseassistantapplication.R;
+import com.example.courseassistantapplication.activity.AddPollsActivity;
 import com.example.courseassistantapplication.activity.AddStudentActivity;
+import com.example.courseassistantapplication.activity.PollResultsActivity;
 import com.example.courseassistantapplication.model.Course;
 import com.example.courseassistantapplication.model.Group;
 import com.google.firebase.auth.FirebaseUser;
@@ -68,10 +70,22 @@ public class CourseGroupAdapter extends RecyclerView.Adapter<CourseGroupAdapter.
                 intent.putExtra("groupNumber", finalX);
                 context.startActivity(intent);
             });
+            holder.btn_add_poll.setOnClickListener(v ->{
+                Intent intent = new Intent(context, AddPollsActivity.class);
+                intent.putExtra("courseId", course.getCourseId());
+                context.startActivity(intent);
+            });
+            holder.btn_show_poll.setOnClickListener(v ->{
+                Intent intent = new Intent(context, PollResultsActivity.class);
+                intent.putExtra("courseId", course.getCourseId());
+                context.startActivity(intent);
+            });
         }
         else{
             holder.groupNumbers.setText(x);
-            holder.btn_add_student.setVisibility(View.GONE); // Öğrenci ise butonu gizle
+            holder.btn_add_student.setVisibility(View.GONE);
+            holder.btn_add_poll.setVisibility(View.GONE);
+            holder.btn_show_poll.setVisibility(View.GONE);// Öğrenci ise butonu gizle
         }
 
     }
@@ -84,7 +98,7 @@ public class CourseGroupAdapter extends RecyclerView.Adapter<CourseGroupAdapter.
     public static class CourseGroupViewHolder extends RecyclerView.ViewHolder {
 
         TextView courseName, courseId, courseDate, groupNumbers;
-        Button btn_add_student;
+        Button btn_add_student,btn_add_poll,btn_show_poll;
 
         public CourseGroupViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -93,6 +107,9 @@ public class CourseGroupAdapter extends RecyclerView.Adapter<CourseGroupAdapter.
             courseDate = itemView.findViewById(R.id.course_date);
             groupNumbers = itemView.findViewById(R.id.group_numbers);
             btn_add_student = itemView.findViewById(R.id.btn_add_student);
+            btn_add_poll = itemView.findViewById(R.id.btn_add_poll);
+            btn_show_poll = itemView.findViewById(R.id.btn_show_poll);
+
         }
     }
 }

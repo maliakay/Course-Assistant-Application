@@ -24,5 +24,15 @@
         android:text="Add New Course"
         android:textSize="18sp"
         app:cornerRadius="20dp"/>
+    <Button
+        android:id="@+id/show_polls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="showPolls"
+        android:layout_marginTop="30dp"
+        android:backgroundTint="@color/black"
+        android:text="Show Polls"
+        android:textSize="18sp"
+        app:cornerRadius="20dp"/>
 
 </LinearLayout>
