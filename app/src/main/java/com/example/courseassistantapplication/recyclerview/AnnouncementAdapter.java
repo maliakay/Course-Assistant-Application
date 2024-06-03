@@ -1,5 +1,7 @@
 package com.example.courseassistantapplication.recyclerview;
 
+import static java.sql.Types.NULL;
+
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -18,6 +20,7 @@ import com.example.courseassistantapplication.model.Announcement;
 import com.example.courseassistantapplication.model.Comment;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapter.ViewHolder> {
     private List<Announcement> announcementList;
@@ -34,18 +37,20 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_announcement, parent, false);
         return new ViewHolder(view);
     }
-
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Announcement announcement = announcementList.get(position);
         holder.announcementContent.setText(announcement.getContent());
+        final Integer[] count = {0};
         holder.commentButton.setOnClickListener(v -> {
             Intent intent = new Intent(context, AddCommentsActivity.class);
             intent.putExtra("announcementId", announcement.getAnnouncementId());
             context.startActivity(intent);
+            count[0] =1;
         });
-
-        holder.loadComments(announcement.getComment());
+        if(count[0] ==1) {
+            holder.loadComments(announcement.getComment());
+        }
     }
 
     @Override
@@ -60,7 +65,7 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
         public ViewHolder(View view) {
             super(view);
             announcementContent = view.findViewById(R.id.announcement_content);
-            commentButton = view.findViewById(R.id.comment_button);
+            commentButton = view.findViewById(R.id.btAddComment);
             commentsRecyclerView = view.findViewById(R.id.recycler_view);//
 
         }
@@ -69,6 +74,8 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
             commentsRecyclerView.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
             commentsRecyclerView.setAdapter(commentAdapter);
         }
+
+        
     }
 
 }

@@ -1,6 +1,8 @@
 package com.example.courseassistantapplication.activity;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,7 +26,8 @@ public class AnnouncementActivity extends AppCompatActivity {
     private AnnouncementAdapter announcementAdapter;
     private List<Announcement> announcementList;
     private FirebaseDatabase database;
-    private DatabaseReference announcementsRef;
+    private DatabaseReference mReference;
+    private Context context;
     String courseId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +42,9 @@ public class AnnouncementActivity extends AppCompatActivity {
         recyclerView.setAdapter(announcementAdapter);
 
         database = FirebaseDatabase.getInstance();
-        announcementsRef = database.getReference("announcements");
+        mReference = database.getReference("announcements");
 
-        announcementsRef.addValueEventListener(new ValueEventListener() {
+        mReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 announcementList.clear();
@@ -54,7 +57,7 @@ public class AnnouncementActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle possible errors.
+                Toast.makeText(context, "Error On Reaching Data", Toast.LENGTH_LONG).show();
             }
         });
     }

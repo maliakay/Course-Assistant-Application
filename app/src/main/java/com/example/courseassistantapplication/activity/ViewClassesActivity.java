@@ -61,7 +61,6 @@ public class ViewClassesActivity extends AppCompatActivity {
                 loadTeacherCourses();
             }
         } else {
-            // User is not logged in, redirect to login activity
             Toast.makeText(this, "User not logged in. Redirecting to login...", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(ViewClassesActivity.this, LoginActivity.class));
         }
@@ -77,6 +76,7 @@ public class ViewClassesActivity extends AppCompatActivity {
                     for (DataSnapshot groupSnapshot : courseSnapshot.child("courseGroups").getChildren()) {
                         for (DataSnapshot studentSnapshot : groupSnapshot.child("Kayıtlı Öğrenciler").getChildren()) {
                             String registeredStudentEmail = studentSnapshot.getValue(String.class);
+                            assert registeredStudentEmail != null;
                             if (registeredStudentEmail.equals(currentUserEmail)) {
                                 courseList.add(course);
                                 break;

@@ -17,8 +17,9 @@
         android:id="@+id/alert_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Send alert"
-        android:layout_marginLeft="150dp"/>
+        android:layout_marginLeft="150dp"
+        android:minHeight="48dp"
+        android:text="Send alert" />
 <LinearLayout
     android:layout_marginTop="40dp"
     android:layout_width="match_parent"

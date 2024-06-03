@@ -26,7 +26,7 @@ public class CreateAnnouncementActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference mReference;
     private Context context;
-    String courseId;
+    private String courseId;
 
     private FirebaseUser mUser;
 
@@ -50,6 +50,7 @@ public class CreateAnnouncementActivity extends AppCompatActivity {
             String announcementId = mReference.push().getKey();
             Announcement announcement = new Announcement(courseId, mUser.getEmail(), content, announcementId, new ArrayList<>(), alert);
 
+            assert announcementId != null;
             mReference.child(announcementId).setValue(announcement);
             finish();
         });
