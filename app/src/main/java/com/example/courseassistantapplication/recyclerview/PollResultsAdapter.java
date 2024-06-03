@@ -19,7 +19,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.courseassistantapplication.R;
-import com.example.courseassistantapplication.model.QuestionResult;
+import com.example.courseassistantapplication.model.QuestionPollResult;
 import com.example.courseassistantapplication.model.CSVHelper;
 import com.example.courseassistantapplication.model.EmailHelper;
 import com.github.mikephil.charting.charts.PieChart;
@@ -37,10 +37,10 @@ import java.util.Map;
 public class PollResultsAdapter extends RecyclerView.Adapter<PollResultsAdapter.ResultViewHolder> {
 
     private static final String TAG = "PollResultsAdapter";
-    private List<QuestionResult> resultsList;
+    private List<QuestionPollResult> resultsList;
     private Context context;
 
-    public PollResultsAdapter(List<QuestionResult> resultsList, Context context) {
+    public PollResultsAdapter(List<QuestionPollResult> resultsList, Context context) {
         this.resultsList = resultsList;
         this.context = context;
     }
@@ -75,13 +75,13 @@ public class PollResultsAdapter extends RecyclerView.Adapter<PollResultsAdapter.
             buttonExportCSV = itemView.findViewById(R.id.buttonExportCSV);
         }
 
-        public void bind(QuestionResult questionResult) {
-            textViewPollTitle.setText(questionResult.getPollTitle());
+        public void bind(QuestionPollResult QuestionPollResult) {
+            textViewPollTitle.setText(QuestionPollResult.getPollTitle());
             chartContainer.removeAllViews(); // Clear previous charts if any
 
-            for (int i = 0; i < questionResult.getQuestions().size(); i++) {
-                String question = questionResult.getQuestions().get(i);
-                Map<String, Integer> answerCounts = questionResult.getAnswerCounts().get(i);
+            for (int i = 0; i < QuestionPollResult.getQuestions().size(); i++) {
+                String question = QuestionPollResult.getQuestions().get(i);
+                Map<String, Integer> answerCounts = QuestionPollResult.getAnswerCounts().get(i);
 
                 TextView questionTextView = new TextView(itemView.getContext());
                 questionTextView.setText(question);
@@ -100,7 +100,7 @@ public class PollResultsAdapter extends RecyclerView.Adapter<PollResultsAdapter.
                 @Override
                 public void onClick(View v) {
                     try {
-                        Uri csvUri = CSVHelper.createCSVFile(questionResult.getPollTitle(), questionResult.getQuestions(), questionResult.getAnswerCounts(), context);
+                        Uri csvUri = CSVHelper.createCSVFile(QuestionPollResult.getPollTitle(), QuestionPollResult.getQuestions(), QuestionPollResult.getAnswerCounts(), context);
                         EmailHelper.sendEmailWithAttachment(csvUri, FirebaseAuth.getInstance().getCurrentUser().getEmail(), context);
                         Toast.makeText(context, "CSV file created and email sent", Toast.LENGTH_SHORT).show();
                         showOpenCSVDialog(csvUri);

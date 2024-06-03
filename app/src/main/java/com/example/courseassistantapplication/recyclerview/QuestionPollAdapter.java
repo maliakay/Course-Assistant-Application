@@ -1,6 +1,6 @@
 package com.example.courseassistantapplication.recyclerview;
 
-// QuestionsAdapter.java
+// QuestionPollAdapter.java
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -15,18 +15,18 @@ import com.example.courseassistantapplication.R;
 
 import java.util.List;
 
-public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.QuestionViewHolder> {
+public class QuestionPollAdapter extends RecyclerView.Adapter<QuestionPollAdapter.QuestionViewHolder> {
 
     private List<String> questionsList;
 
-    public QuestionsAdapter(List<String> questionsList) {
+    public QuestionPollAdapter(List<String> questionsList) {
         this.questionsList = questionsList;
     }
 
     @NonNull
     @Override
     public QuestionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_question, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_poll_question, parent, false);
         return new QuestionViewHolder(view);
     }
 

@@ -20,7 +20,7 @@ public class AnswerQuestionsAdapter extends RecyclerView.Adapter<AnswerQuestions
 
     private List<String> questionsList;
     private List<String> answersList;
-    private String[] answerOptions = {"Çok iyi", "İyi", "Orta", "Kötü", "Çok kötü"};
+    private String[] answerOptions = {"Cok iyi", "Iyi", "Orta", "Kotu", "Cok kotu"};
 
     public AnswerQuestionsAdapter(List<String> questionsList, List<String> answersList) {
         this.questionsList = questionsList;

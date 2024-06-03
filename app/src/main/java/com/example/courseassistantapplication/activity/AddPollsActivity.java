@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.courseassistantapplication.R;
 import com.example.courseassistantapplication.model.Course;
 import com.example.courseassistantapplication.model.Poll;
-import com.example.courseassistantapplication.recyclerview.QuestionsAdapter;
+import com.example.courseassistantapplication.recyclerview.QuestionPollAdapter;
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -40,7 +40,7 @@ public class AddPollsActivity extends AppCompatActivity {
     private TextView coursePollId;
     private RecyclerView recyclerViewQuestions;
     private Button buttonGenerateQuestions,buttonSubmitPoll;
-    private QuestionsAdapter questionsAdapter;
+    private QuestionPollAdapter QuestionPollAdapter;
     private List<String> questionsList;
     private List<String> courseList;
     private DatabaseReference mReference;
@@ -62,10 +62,10 @@ public class AddPollsActivity extends AppCompatActivity {
         mReference = FirebaseDatabase.getInstance().getReference();
         questionsList = new ArrayList<>();
         courseList = new ArrayList<>();
-        questionsAdapter = new QuestionsAdapter(questionsList);
+        QuestionPollAdapter = new QuestionPollAdapter(questionsList);
 
         recyclerViewQuestions.setLayoutManager(new LinearLayoutManager(this));
-        recyclerViewQuestions.setAdapter(questionsAdapter);
+        recyclerViewQuestions.setAdapter(QuestionPollAdapter);
 
         coursePollId.setText(courseId);
 
@@ -117,7 +117,7 @@ public class AddPollsActivity extends AppCompatActivity {
             for(int i =0;i<numQuestions;i++){
                 questionsList.add("");
             }
-            questionsAdapter.notifyDataSetChanged();
+            QuestionPollAdapter.notifyDataSetChanged();
         }else{
             Toast.makeText(this, "Please Enter the number of questions ", Toast.LENGTH_SHORT).show();
         }

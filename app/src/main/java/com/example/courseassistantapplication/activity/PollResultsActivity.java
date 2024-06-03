@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.courseassistantapplication.R;
 import com.example.courseassistantapplication.model.Poll;
-import com.example.courseassistantapplication.model.QuestionResult;
+import com.example.courseassistantapplication.model.QuestionPollResult;
 import com.example.courseassistantapplication.recyclerview.PollResultsAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -36,7 +36,7 @@ public class PollResultsActivity extends AppCompatActivity {
 
     private RecyclerView recyclerViewResults;
     private PollResultsAdapter resultsAdapter;
-    private List<QuestionResult> resultsList;
+    private List<QuestionPollResult> resultsList;
     private DatabaseReference mReference;
     private String userId;
 
@@ -88,7 +88,7 @@ public class PollResultsActivity extends AppCompatActivity {
                             questionsList.add(questionSnapshot.getValue(String.class));
                         }
 
-                        Map<String, Map<String, Integer>> questionResults = new HashMap<>();
+                        Map<String, Map<String, Integer>> QuestionPollResults = new HashMap<>();
 
                         for (DataSnapshot responseSnapshot : pollSnapshot.child("responses").getChildren()) {
                             for (DataSnapshot answerSnapshot : responseSnapshot.getChildren()) {
@@ -97,11 +97,11 @@ public class PollResultsActivity extends AppCompatActivity {
                                 String question = questionsList.get(questionIndex);
                                 String answer = answerSnapshot.getValue(String.class);
 
-                                if (!questionResults.containsKey(question)) {
-                                    questionResults.put(question, new HashMap<>());
+                                if (!QuestionPollResults.containsKey(question)) {
+                                    QuestionPollResults.put(question, new HashMap<>());
                                 }
 
-                                Map<String, Integer> answerCounts = questionResults.get(question);
+                                Map<String, Integer> answerCounts = QuestionPollResults.get(question);
                                 if (!answerCounts.containsKey(answer)) {
                                     answerCounts.put(answer, 0);
                                 }
@@ -111,10 +111,10 @@ public class PollResultsActivity extends AppCompatActivity {
 
                         List<Map<String, Integer>> answersList = new ArrayList<>();
                         for (String question : questionsList) {
-                            answersList.add(questionResults.getOrDefault(question, new HashMap<>()));
+                            answersList.add(QuestionPollResults.getOrDefault(question, new HashMap<>()));
                         }
 
-                        resultsList.add(new QuestionResult(pollTitle, questionsList, answersList));
+                        resultsList.add(new QuestionPollResult(pollTitle, questionsList, answersList));
                     }
                 }
                 resultsAdapter.notifyDataSetChanged();
