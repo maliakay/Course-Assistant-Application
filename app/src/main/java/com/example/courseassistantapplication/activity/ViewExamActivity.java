@@ -173,8 +173,14 @@ public class ViewExamActivity extends AppCompatActivity {
                 allQuestions.clear(); // Clear the all questions list
 
                 for (DataSnapshot questionSnapshot : snapshot.child("questions").getChildren()) {
-                    Question question = questionSnapshot.getValue(Question.class);
-                    if (question != null) {
+                    String questionText = questionSnapshot.child("questionText").getValue(String.class);
+                    Map<String, String> optionsMap = (Map<String, String>) questionSnapshot.child("options").getValue();
+
+                    if (questionText != null && optionsMap != null) {
+                        Question question = new Question();
+                        question.setQuestionText(questionText);
+                        question.setOptions(optionsMap);
+
                         String firebaseKey = questionSnapshot.getKey(); // Get the Firebase key
                         allQuestions.add(new QuestionWithIndex(question, firebaseKey)); // Add the question with its key
                     }
@@ -208,6 +214,10 @@ public class ViewExamActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
+
 
     private void submitExamResponses() {
         if (selectedExamId == null) {

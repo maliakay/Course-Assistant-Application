@@ -22,7 +22,7 @@ public class ExamQuestionAdapter extends RecyclerView.Adapter<ExamQuestionAdapte
     @NonNull
     @Override
     public QuestionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_question, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_exam_question, parent, false);
         return new QuestionViewHolder(view);
     }
 
@@ -36,17 +36,16 @@ public class ExamQuestionAdapter extends RecyclerView.Adapter<ExamQuestionAdapte
         return questionCount;
     }
 
-    public static class QuestionViewHolder extends RecyclerView.ViewHolder {
+    static class QuestionViewHolder extends RecyclerView.ViewHolder {
 
         TextView questionNumber;
         EditText questionText;
-        EditText[] answerOptions;
+        EditText[] answerOptions = new EditText[5];
 
         public QuestionViewHolder(@NonNull View itemView) {
             super(itemView);
             questionNumber = itemView.findViewById(R.id.questionNumber);
             questionText = itemView.findViewById(R.id.questionText);
-            answerOptions = new EditText[5];
             answerOptions[0] = itemView.findViewById(R.id.answerOptionA);
             answerOptions[1] = itemView.findViewById(R.id.answerOptionB);
             answerOptions[2] = itemView.findViewById(R.id.answerOptionC);
@@ -55,4 +54,3 @@ public class ExamQuestionAdapter extends RecyclerView.Adapter<ExamQuestionAdapte
         }
     }
 }
-

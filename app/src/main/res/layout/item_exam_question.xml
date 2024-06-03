@@ -3,19 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/questionNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Question 1" />
+        android:text="Question Number"
+        android:textStyle="bold"
+        android:paddingBottom="8dp" />
 
     <EditText
         android:id="@+id/questionText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Question" />
+        android:hint="Question Text" />
 
     <EditText
         android:id="@+id/answerOptionA"

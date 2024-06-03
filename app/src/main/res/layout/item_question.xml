@@ -3,52 +3,49 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="16dp">
 
     <TextView
-        android:id="@+id/questionText"
+        android:id="@+id/questionNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Question Text"
+        android:text="Question Number"
         android:textStyle="bold"
-        android:padding="4dp" />
+        android:paddingBottom="8dp" />
 
-    <RadioGroup
-        android:id="@+id/answersGroup"
+    <EditText
+        android:id="@+id/questionText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="4dp">
+        android:hint="Question Text" />
 
-        <RadioButton
-            android:id="@+id/answerOptionA"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Option A" />
+    <EditText
+        android:id="@+id/answerOptionA"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Option A" />
 
-        <RadioButton
-            android:id="@+id/answerOptionB"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Option B" />
+    <EditText
+        android:id="@+id/answerOptionB"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Option B" />
 
-        <RadioButton
-            android:id="@+id/answerOptionC"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Option C" />
+    <EditText
+        android:id="@+id/answerOptionC"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Option C" />
 
-        <RadioButton
-            android:id="@+id/answerOptionD"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Option D" />
+    <EditText
+        android:id="@+id/answerOptionD"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Option D" />
 
-        <RadioButton
-            android:id="@+id/answerOptionE"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Option E" />
-
-    </RadioGroup>
+    <EditText
+        android:id="@+id/answerOptionE"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Option E" />
 </LinearLayout>
