@@ -63,9 +63,6 @@ public class LoginActivity extends AppCompatActivity {
                             mUser = mAuth.getCurrentUser();
                             Intent intent = new Intent(LoginActivity.this, ViewProfileActivity.class);
                             startActivity(intent);
-                            finish();
-
-
                         }
                     }).addOnFailureListener(this, new OnFailureListener() {
                         @Override
