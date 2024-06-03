@@ -64,6 +64,7 @@ public class MyCoursesTeacherActivity extends AppCompatActivity {
             String currentUserEmail = mUser.getEmail();
             if (currentUserEmail != null && currentUserEmail.endsWith("@std.yildiz.edu.tr")) {
                 addCourseBtn.setVisibility(View.GONE);
+
                 loadStudentCourses(currentUserEmail);
             }else{
                 loadTeacherCourses();

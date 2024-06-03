@@ -1,5 +1,6 @@
 package com.example.courseassistantapplication.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -35,7 +36,8 @@ public class CreateNewReport extends AppCompatActivity {
     private DatabaseReference courseReference;
     private DatabaseReference reportReference;
     private String recipient;
-    private Course tmpCourse;
+    private String courseID;
+    private String emailOfInstructor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,13 @@ public class CreateNewReport extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerRecipient.setAdapter(adapter);
 
+        Intent intent = getIntent();
+        if (intent != null) {
+            courseID = intent.getStringExtra("courseId");
+            emailOfInstructor = intent.getStringExtra("instructorMail");
+        }
+        editTextCourseName.setText(courseID);
+
         buttonCreateReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,31 +75,14 @@ public class CreateNewReport extends AppCompatActivity {
                 String reportBody = editTextReportBody.getText().toString();
                 Date reportDate = new Date();
 
-                courseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                        if(spinnerRecipient.getSelectedItem().toString().equals("Akademisyen")){
-                           for (DataSnapshot childSnapshot : snapshot.getChildren()) {
-                               tmpCourse = childSnapshot.getValue(Course.class);
-                               if (tmpCourse.getCourseId().equalsIgnoreCase(courseName.replaceAll(" ",""))){
-                                   recipient = tmpCourse.getEmailOfInstructor();
-                               };
-                           }
-                           if (recipient == null){
-                               recipient = "Akademisyen mailine ulaşılamıyor";
-                           }
-                        }else{
-                            //Admin seçilmiş
-                            recipient = "emirozturk46@outlook.com";
-                        }
+                if(spinnerRecipient.getSelectedItem().toString().equals("Akademisyen")){
+                    recipient = emailOfInstructor;
+                    if (recipient == null) {
+                        recipient = "Akademisyen mailine ulaşılamıyor";
                     }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Toast.makeText(CreateNewReport.this, error.toException().getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                }else{
+                    recipient = "emirozturk46@outlook.com";
+                }
 
 
                 if (!reportScope.isEmpty() && !courseName.isEmpty() && !reportSubject.isEmpty() &&

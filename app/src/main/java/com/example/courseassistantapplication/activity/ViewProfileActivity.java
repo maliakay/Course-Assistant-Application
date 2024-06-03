@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,7 +31,7 @@ public class ViewProfileActivity extends AppCompatActivity {
     private DatabaseReference mReference;
 
     TextView name, surname, studentIDLabel, studentID, phoneNumber, education, mail, educationLabel, user, showCourses_btn;
-
+    Button btn_report;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,11 +43,11 @@ public class ViewProfileActivity extends AppCompatActivity {
         studentIDLabel = findViewById(R.id.studentIDLabel);
         studentID = findViewById(R.id.studentID);
 
-
         phoneNumber = findViewById(R.id.phoneNumber);
         education = findViewById(R.id.education);
         educationLabel = findViewById(R.id.educationLabel);
         mail = findViewById(R.id.mail);
+        btn_report = findViewById(R.id.report_button);
 
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
@@ -61,6 +62,7 @@ public class ViewProfileActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()) {
+                            btn_report.setVisibility(View.GONE);
                             Student student = snapshot.getValue(Student.class);
                             if (student != null) {
                                 user.setText("Student");
@@ -113,7 +115,6 @@ public class ViewProfileActivity extends AppCompatActivity {
 
     public void update(View view) {
         startActivity(new Intent(ViewProfileActivity.this, UpdateProfileActivity.class));
-        finish();
     }
 
     public void callPhoneNumber(View view) {
