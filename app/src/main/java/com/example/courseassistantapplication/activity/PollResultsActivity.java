@@ -1,10 +1,15 @@
 package com.example.courseassistantapplication.activity;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,6 +31,9 @@ import java.util.Map;
 
 public class PollResultsActivity extends AppCompatActivity {
 
+    private static final String TAG = "PollResultsActivity";
+    private static final int PERMISSION_REQUEST_CODE = 1;
+
     private RecyclerView recyclerViewResults;
     private PollResultsAdapter resultsAdapter;
     private List<QuestionResult> resultsList;
@@ -42,12 +50,28 @@ public class PollResultsActivity extends AppCompatActivity {
         mReference = FirebaseDatabase.getInstance().getReference();
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         resultsList = new ArrayList<>();
-        resultsAdapter = new PollResultsAdapter(resultsList);
+        resultsAdapter = new PollResultsAdapter(resultsList, this);
 
         recyclerViewResults.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewResults.setAdapter(resultsAdapter);
 
-        loadPollResults();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+        } else {
+            loadPollResults();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                loadPollResults();
+            } else {
+                Toast.makeText(this, "İzin verilmedi. CSV dosyasını oluşturmak için izin gereklidir.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private void loadPollResults() {

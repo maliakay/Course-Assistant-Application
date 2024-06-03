@@ -1,4 +1,3 @@
-<!-- res/layout/item_poll_result.xml -->
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -29,6 +28,12 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingTop="16dp" />
+
+        <Button
+            android:id="@+id/buttonExportCSV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Export CSV" />
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

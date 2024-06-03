@@ -1,33 +1,48 @@
 package com.example.courseassistantapplication.recyclerview;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.courseassistantapplication.R;
 import com.example.courseassistantapplication.model.QuestionResult;
+import com.example.courseassistantapplication.model.CSVHelper;
+import com.example.courseassistantapplication.model.EmailHelper;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.firebase.auth.FirebaseAuth;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class PollResultsAdapter extends RecyclerView.Adapter<PollResultsAdapter.ResultViewHolder> {
 
+    private static final String TAG = "PollResultsAdapter";
     private List<QuestionResult> resultsList;
+    private Context context;
 
-    public PollResultsAdapter(List<QuestionResult> resultsList) {
+    public PollResultsAdapter(List<QuestionResult> resultsList, Context context) {
         this.resultsList = resultsList;
+        this.context = context;
     }
 
     @NonNull
@@ -51,11 +66,13 @@ public class PollResultsAdapter extends RecyclerView.Adapter<PollResultsAdapter.
 
         private TextView textViewPollTitle;
         private LinearLayout chartContainer;
+        private Button buttonExportCSV;
 
         public ResultViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewPollTitle = itemView.findViewById(R.id.textViewPollTitle);
             chartContainer = itemView.findViewById(R.id.chartContainer);
+            buttonExportCSV = itemView.findViewById(R.id.buttonExportCSV);
         }
 
         public void bind(QuestionResult questionResult) {
@@ -78,6 +95,22 @@ public class PollResultsAdapter extends RecyclerView.Adapter<PollResultsAdapter.
 
                 setupPieChart(pieChart, answerCounts, question);
             }
+
+            buttonExportCSV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        Uri csvUri = CSVHelper.createCSVFile(questionResult.getPollTitle(), questionResult.getQuestions(), questionResult.getAnswerCounts(), context);
+                        EmailHelper.sendEmailWithAttachment(csvUri, FirebaseAuth.getInstance().getCurrentUser().getEmail(), context);
+                        Toast.makeText(context, "CSV file created and email sent", Toast.LENGTH_SHORT).show();
+                        showOpenCSVDialog(csvUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Log.e(TAG, "Failed to create CSV file", e);
+                        Toast.makeText(context, "Failed to create CSV file", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
 
         private void setupPieChart(PieChart pieChart, Map<String, Integer> answerCounts, String question) {
@@ -96,6 +129,26 @@ public class PollResultsAdapter extends RecyclerView.Adapter<PollResultsAdapter.
             pieChart.setCenterText(question);
             pieChart.setEntryLabelColor(Color.BLACK);
             pieChart.setEntryLabelTextSize(12f);
+        }
+
+        private void showOpenCSVDialog(Uri csvUri) {
+            new AlertDialog.Builder(context)
+                    .setTitle("CSV Dosyası Oluşturuldu")
+                    .setMessage("CSV dosyası oluşturuldu. Açmak ister misiniz?")
+                    .setPositiveButton("Evet", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            openCSVFile(csvUri);
+                        }
+                    })
+                    .setNegativeButton("Hayır", null)
+                    .show();
+        }
+
+        private void openCSVFile(Uri csvUri) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(csvUri, "text/csv");
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
         }
     }
 }
