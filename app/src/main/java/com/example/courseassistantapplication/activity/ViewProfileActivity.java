@@ -174,4 +174,8 @@ public class ViewProfileActivity extends AppCompatActivity {
     public void showCourses(View view){
         startActivity(new Intent(ViewProfileActivity.this, MyCoursesTeacherActivity.class));
     }
+
+    public void classroom(View view){
+        startActivity(new Intent(ViewProfileActivity.this, ViewClassesActivity.class));
+    }
 }
