@@ -72,7 +72,6 @@ public class MyCoursesTeacherActivity extends AppCompatActivity {
             Toast.makeText(this, "User not logged in. Redirecting to login...", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(MyCoursesTeacherActivity.this, LoginActivity.class));
             finish();
-            return;
         }
 
         // Load teacher's courses from Firebase

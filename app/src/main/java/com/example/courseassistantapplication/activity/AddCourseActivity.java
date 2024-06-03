@@ -125,7 +125,7 @@ public class AddCourseActivity extends AppCompatActivity {
         finish();
     }
 
-    private DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+    private final DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             calendar.set(Calendar.YEAR, year);

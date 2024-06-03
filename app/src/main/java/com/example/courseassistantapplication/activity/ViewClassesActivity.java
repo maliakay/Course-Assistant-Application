@@ -63,7 +63,6 @@ public class ViewClassesActivity extends AppCompatActivity {
             // User is not logged in, redirect to login activity
             Toast.makeText(this, "User not logged in. Redirecting to login...", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(ViewClassesActivity.this, LoginActivity.class));
-            return;
         }
     }
 

@@ -18,7 +18,7 @@ import java.util.List;
 
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHolder> {
 
-    private List<Group> groupList;
+    private final List<Group> groupList;
     private List<String> instructorEmails;
 
     public GroupAdapter(List<Group> groupList) {

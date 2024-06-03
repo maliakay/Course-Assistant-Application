@@ -21,9 +21,9 @@ import java.util.List;
 
 public class CourseGroupAdapter extends RecyclerView.Adapter<CourseGroupAdapter.CourseGroupViewHolder> {
 
-    private List<Course> courseList;
-    private Context context;
-    private FirebaseUser mUser;
+    private final List<Course> courseList;
+    private final Context context;
+    private final FirebaseUser mUser;
 
     public CourseGroupAdapter(List<Course> courseList, Context context, FirebaseUser mUser) {
         this.courseList = courseList;

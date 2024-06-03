@@ -75,7 +75,7 @@ public class CreateNewReport extends AppCompatActivity {
                                tmpCourse = childSnapshot.getValue(Course.class);
                                if (tmpCourse.getCourseId().equalsIgnoreCase(courseName.replaceAll(" ",""))){
                                    recipient = tmpCourse.getEmailOfInstructor();
-                               };
+                               }
                            }
                            if (recipient == null){
                                recipient = "Akademisyen mailine ulaşılamıyor";

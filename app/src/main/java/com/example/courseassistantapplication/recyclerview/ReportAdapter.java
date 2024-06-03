@@ -15,7 +15,7 @@ import java.util.List;
 
 public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportViewHolder> {
 
-    private List<Report> reportList;
+    private final List<Report> reportList;
 
     public ReportAdapter(List<Report> reportList) {
         this.reportList = reportList;

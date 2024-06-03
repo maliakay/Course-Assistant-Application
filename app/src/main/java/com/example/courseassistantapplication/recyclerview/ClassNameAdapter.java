@@ -21,9 +21,9 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.List;
 
 public class ClassNameAdapter extends RecyclerView.Adapter<ClassNameAdapter.ClassNameViewHolder> {
-    private List<Course> courseList;
-    private Context context;
-    private FirebaseUser mUser;
+    private final List<Course> courseList;
+    private final Context context;
+    private final FirebaseUser mUser;
 
     public ClassNameAdapter(List<Course> courseList, Context context, FirebaseUser mUser) {
         this.courseList = courseList;
