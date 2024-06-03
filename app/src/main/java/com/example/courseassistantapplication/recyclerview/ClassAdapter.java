@@ -14,7 +14,8 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.courseassistantapplication.R;
-import com.example.courseassistantapplication.activity.ViewCourseSiteActivity;
+import com.example.courseassistantapplication.activity.CreateAnnouncementActivity;
+import com.example.courseassistantapplication.activity.AnnouncementActivity;
 import com.example.courseassistantapplication.model.Course;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -45,7 +46,7 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.CourseViewHo
         holder.className.setText(course.getCourseName());
         holder.cardView.setOnClickListener(v -> {
             Toast.makeText(context, "Card Clicked: " + course.getCourseName(), Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(context, ViewCourseSiteActivity.class);
+            Intent intent = new Intent(context, CreateAnnouncementActivity.class);
             context.startActivity(intent);
         });
     }

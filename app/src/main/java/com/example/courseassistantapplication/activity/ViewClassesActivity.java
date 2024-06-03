@@ -48,6 +48,7 @@ public class ViewClassesActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.rwClasses);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         courseList = new ArrayList<>();
+        groupList= new ArrayList<>();
         adapter = new ClassNameAdapter(courseList, this, mUser);
         recyclerView.setAdapter(adapter);
 

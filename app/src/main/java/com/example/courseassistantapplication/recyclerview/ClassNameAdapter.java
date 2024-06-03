@@ -14,22 +14,29 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.courseassistantapplication.R;
-import com.example.courseassistantapplication.activity.ViewCourseSiteActivity;
+import com.example.courseassistantapplication.activity.AnnouncementActivity;
+import com.example.courseassistantapplication.activity.CreateAnnouncementActivity;
+import com.example.courseassistantapplication.activity.LoginActivity;
+import com.example.courseassistantapplication.activity.ViewClassesActivity;
 import com.example.courseassistantapplication.model.Course;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
 public class ClassNameAdapter extends RecyclerView.Adapter<ClassNameAdapter.ClassNameViewHolder> {
-    private final List<Course> courseList;
-    private final Context context;
-    private final FirebaseUser mUser;
+    private List<Course> courseList;
+    private Context context;
+    private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
 
     public ClassNameAdapter(List<Course> courseList, Context context, FirebaseUser mUser) {
         this.courseList = courseList;
         this.context = context;
-        this.mUser = mUser;
+        this.mAuth = FirebaseAuth.getInstance();
+        this.mUser = this.mAuth.getCurrentUser();
     }
+
 
     @NonNull
     @Override
@@ -44,8 +51,23 @@ public class ClassNameAdapter extends RecyclerView.Adapter<ClassNameAdapter.Clas
         holder.classCode.setText(course.getCourseId());
         holder.className.setText(course.getCourseName());
         holder.cardView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, ViewCourseSiteActivity.class);
-            context.startActivity(intent);
+                    if (mUser != null) {
+                        String currentUserEmail = mUser.getEmail();
+                        if (currentUserEmail != null && currentUserEmail.endsWith("@std.yildiz.edu.tr")) {
+                            Intent intent = new Intent(context, AnnouncementActivity.class);
+                            context.startActivity(intent);
+                        } else {
+                            Toast.makeText(context, "elsede", Toast.LENGTH_SHORT).show();
+
+                            Intent intent = new Intent(context, CreateAnnouncementActivity.class);
+                            context.startActivity(intent);
+                        }
+                    } else {
+                        Toast.makeText(context, "User not logged in. Redirecting to login...", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(context, LoginActivity.class);
+                        context.startActivity(intent);
+                    }
+
         });
     }
 
