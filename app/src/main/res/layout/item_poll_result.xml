@@ -6,12 +6,20 @@
     android:padding="8dp">
 
     <TextView
+        android:id="@+id/textViewPollTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Anket Başlığı"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:padding="4dp" />
+
+    <TextView
         android:id="@+id/textViewQuestion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Soru"
         android:textSize="16sp"
-        android:textStyle="bold"
         android:padding="4dp" />
 
     <TextView

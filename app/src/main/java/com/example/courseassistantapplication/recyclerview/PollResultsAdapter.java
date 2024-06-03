@@ -1,6 +1,5 @@
 package com.example.courseassistantapplication.recyclerview;
 
-// PollResultsAdapter.java
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,16 +41,19 @@ public class PollResultsAdapter extends RecyclerView.Adapter<PollResultsAdapter.
 
     class ResultViewHolder extends RecyclerView.ViewHolder {
 
+        private TextView textViewPollTitle;
         private TextView textViewQuestion;
         private TextView textViewResults;
 
         public ResultViewHolder(@NonNull View itemView) {
             super(itemView);
+            textViewPollTitle = itemView.findViewById(R.id.textViewPollTitle);
             textViewQuestion = itemView.findViewById(R.id.textViewQuestion);
             textViewResults = itemView.findViewById(R.id.textViewResults);
         }
 
         public void bind(QuestionResult questionResult) {
+            textViewPollTitle.setText(questionResult.getPollTitle());
             textViewQuestion.setText(questionResult.getQuestion());
             StringBuilder results = new StringBuilder();
             for (Map.Entry<String, Integer> entry : questionResult.getAnswerCounts().entrySet()) {
