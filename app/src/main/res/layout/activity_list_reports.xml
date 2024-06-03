@@ -5,16 +5,20 @@
     android:padding="16dp">
 
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reports"
+        android:textSize="32dp"
+        android:textAllCaps="true"
+        android:layout_gravity="center"
+        android:textAppearance="@color/black"
+        android:layout_marginTop="30dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewReports"
         android:layout_width="match_parent"
         android:layout_height="600dp"
         android:layout_marginTop="50dp"/>
-    <Button
-        android:id="@+id/buttonNewReport"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="New Report" />
+
 </LinearLayout>

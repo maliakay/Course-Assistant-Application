@@ -33,7 +33,6 @@ public class ListReportsActivity extends AppCompatActivity {
     private RecyclerView recyclerViewReports;
     private ReportAdapter reportAdapter;
     private List<Report> reportList;
-    private Button buttonNewReport;
     private DatabaseReference mReference;
     private FirebaseUser mUser;
     FirebaseAuth mAuth;
@@ -46,7 +45,6 @@ public class ListReportsActivity extends AppCompatActivity {
         mReference = FirebaseDatabase.getInstance().getReference("Şikayetler");
 
         recyclerViewReports = findViewById(R.id.recyclerViewReports);
-        buttonNewReport = findViewById(R.id.buttonNewReport);
 
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
@@ -95,14 +93,6 @@ public class ListReportsActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerViewReports.setLayoutManager(layoutManager);
         recyclerViewReports.setAdapter(reportAdapter);
-
-        buttonNewReport.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ListReportsActivity.this, CreateNewReport.class);
-                startActivity(intent);
-            }
-        });
 
 
         reportAdapter.notifyDataSetChanged();

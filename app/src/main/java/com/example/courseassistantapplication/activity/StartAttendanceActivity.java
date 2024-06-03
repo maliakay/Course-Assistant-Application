@@ -55,6 +55,7 @@ public class StartAttendanceActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private AttandenceAdapter attandenceAdapter;
     private List<String> studentList;
+    String courseID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +69,6 @@ public class StartAttendanceActivity extends AppCompatActivity {
         mReference = FirebaseDatabase.getInstance().getReference();
         Button btnStartAttendance = findViewById(R.id.btnStartAttendance);
         Button btnStopAttandence = findViewById(R.id.btnStopAttendance);
-        Button btnGoJoin = findViewById(R.id.btnGoJoin);
 
         recyclerView = findViewById(R.id.recyclerViewAttandence);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -77,7 +77,13 @@ public class StartAttendanceActivity extends AppCompatActivity {
         attandenceAdapter = new AttandenceAdapter(studentList);
         recyclerView.setAdapter(attandenceAdapter);
 
-        mReference.child("yoklama").child("BLM3131").
+        // Retrieve the data from the intent
+        Intent intent = getIntent();
+        if (intent != null) {
+            courseID = intent.getStringExtra("courseId");
+        }
+
+        mReference.child("yoklama").child(courseID).
                 child("katılan öğrenciler").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -109,12 +115,6 @@ public class StartAttendanceActivity extends AppCompatActivity {
             }
         });
 
-        btnGoJoin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goToJoin();
-            }
-        });
     }
 
     private void startAttendance() {
@@ -133,7 +133,7 @@ public class StartAttendanceActivity extends AppCompatActivity {
     }
     private void StopAttandence(){
         exportCsv();
-        mReference.child("yoklama").child("BLM3131").removeValue(new DatabaseReference.CompletionListener() {
+        mReference.child("yoklama").child(courseID).removeValue(new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
 
@@ -153,7 +153,7 @@ public class StartAttendanceActivity extends AppCompatActivity {
                             Location location = task.getResult();
                             if (location != null) {
                                 //ders için yoklamayı başlat
-                                mReference.child("yoklama").child("BLM3131").child("konum").setValue(location);
+                                mReference.child("yoklama").child(courseID).child("konum").setValue(location);
                                 Toast.makeText(StartAttendanceActivity.this, "Yoklama başlatıldı", Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -178,7 +178,6 @@ public class StartAttendanceActivity extends AppCompatActivity {
             for (String student : studentList) {
                 writer.append(student).append("\n");
             }
-            Toast.makeText(this, studentList.toString(), Toast.LENGTH_SHORT).show();
             writer.flush();
             writer.close();
             openFile(file);
