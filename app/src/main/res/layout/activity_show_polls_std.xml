@@ -1,0 +1,34 @@
+<!-- res/layout/activity_show_polls_std.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".activity.ShowPollsStdActivity">
+
+    <TextView
+        android:id="@+id/textViewSelectCourse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ders Seçiniz"
+        android:textSize="18sp"
+        android:padding="8dp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textColor="@color/black"/>
+
+    <Spinner
+        android:id="@+id/spinnerCourses"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/custom_spinner_background"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewPolls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"/>
+</LinearLayout>

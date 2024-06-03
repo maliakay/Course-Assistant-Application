@@ -33,7 +33,7 @@ public class MyCoursesTeacherActivity extends AppCompatActivity {
     // EĞİTMENLERİN KURSLARINI GÖRÜNTÜLEDİĞİ YER
     private FirebaseAuth mAuth;
     private DatabaseReference mReference;
-    private Button addCourseBtn;
+    private Button addCourseBtn,showPollsBtn;
 
     private FirebaseUser mUser;
     private RecyclerView recyclerView;
@@ -52,6 +52,7 @@ public class MyCoursesTeacherActivity extends AppCompatActivity {
 
         // View bindings
         addCourseBtn = findViewById(R.id.add_course);
+        showPollsBtn = findViewById(R.id.show_polls);
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         courseList = new ArrayList<>();
@@ -66,6 +67,7 @@ public class MyCoursesTeacherActivity extends AppCompatActivity {
                 loadStudentCourses(currentUserEmail);
             }else{
                 loadTeacherCourses();
+                showPollsBtn.setVisibility(View.GONE);
             }
         } else {
             // User is not logged in, redirect to login activity
@@ -81,6 +83,9 @@ public class MyCoursesTeacherActivity extends AppCompatActivity {
     public void addCourse(View view) {
         startActivity(new Intent(MyCoursesTeacherActivity.this, AddCourseActivity.class));
         finish();
+    }
+    public void showPolls(View view){
+        startActivity(new Intent(MyCoursesTeacherActivity.this, ShowPollsStdActivity.class));
     }
 
     private void loadTeacherCourses() {
