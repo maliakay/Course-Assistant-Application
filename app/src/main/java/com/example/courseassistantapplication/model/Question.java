@@ -7,7 +7,7 @@ public class Question {
     private Map<String, String> options;
 
     public Question() {
-        // Default constructor required for calls to DataSnapshot.getValue(Question.class)
+        // Boş yapıcı metod Firebase için gerekli
     }
 
     public Question(String questionText, Map<String, String> options) {

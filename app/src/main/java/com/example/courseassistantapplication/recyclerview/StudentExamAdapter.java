@@ -11,56 +11,56 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.courseassistantapplication.R;
-import com.example.courseassistantapplication.model.Question;
+import com.example.courseassistantapplication.model.QuestionWithIndex;
 
 import java.util.List;
 
 public class StudentExamAdapter extends RecyclerView.Adapter<StudentExamAdapter.QuestionViewHolder> {
 
-    private List<Question> questions;
+    private List<QuestionWithIndex> questionsList;
 
-    public StudentExamAdapter(List<Question> questions) {
-        this.questions = questions;
+    public StudentExamAdapter(List<QuestionWithIndex> questionsList) {
+        this.questionsList = questionsList;
     }
 
     @NonNull
     @Override
     public QuestionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_student_question, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_question, parent, false);
         return new QuestionViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull QuestionViewHolder holder, int position) {
-        Question question = questions.get(position);
-        holder.questionText.setText(question.getQuestionText());
-        holder.answerA.setText(question.getOptions().get("A"));
-        holder.answerB.setText(question.getOptions().get("B"));
-        holder.answerC.setText(question.getOptions().get("C"));
-        holder.answerD.setText(question.getOptions().get("D"));
-        holder.answerE.setText(question.getOptions().get("E"));
+        QuestionWithIndex questionWithIndex = questionsList.get(position);
+        holder.questionText.setText(questionWithIndex.getQuestion().getQuestionText());
+        holder.optionA.setText(questionWithIndex.getQuestion().getOptions().get("A"));
+        holder.optionB.setText(questionWithIndex.getQuestion().getOptions().get("B"));
+        holder.optionC.setText(questionWithIndex.getQuestion().getOptions().get("C"));
+        holder.optionD.setText(questionWithIndex.getQuestion().getOptions().get("D"));
+        holder.optionE.setText(questionWithIndex.getQuestion().getOptions().get("E"));
     }
 
     @Override
     public int getItemCount() {
-        return questions.size();
+        return questionsList.size();
     }
 
-    static class QuestionViewHolder extends RecyclerView.ViewHolder {
+    public static class QuestionViewHolder extends RecyclerView.ViewHolder {
 
         TextView questionText;
-        RadioButton answerA, answerB, answerC, answerD, answerE;
+        RadioButton optionA, optionB, optionC, optionD, optionE;
         RadioGroup answersGroup;
 
         public QuestionViewHolder(@NonNull View itemView) {
             super(itemView);
             questionText = itemView.findViewById(R.id.questionText);
+            optionA = itemView.findViewById(R.id.answerOptionA);
+            optionB = itemView.findViewById(R.id.answerOptionB);
+            optionC = itemView.findViewById(R.id.answerOptionC);
+            optionD = itemView.findViewById(R.id.answerOptionD);
+            optionE = itemView.findViewById(R.id.answerOptionE);
             answersGroup = itemView.findViewById(R.id.answersGroup);
-            answerA = itemView.findViewById(R.id.answerA);
-            answerB = itemView.findViewById(R.id.answerB);
-            answerC = itemView.findViewById(R.id.answerC);
-            answerD = itemView.findViewById(R.id.answerD);
-            answerE = itemView.findViewById(R.id.answerE);
         }
     }
 }

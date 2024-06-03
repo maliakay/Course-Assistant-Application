@@ -1,12 +1,9 @@
 package com.example.courseassistantapplication.recyclerview;
-
-// QuestionsAdapter.java
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,7 +29,8 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.Ques
 
     @Override
     public void onBindViewHolder(@NonNull QuestionViewHolder holder, int position) {
-        holder.bind(position);
+        holder.questionText.setText(questionsList.get(position));
+        holder.questionNumber.setText("Question " + (position + 1));
     }
 
     @Override
@@ -40,31 +38,22 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.Ques
         return questionsList.size();
     }
 
-    class QuestionViewHolder extends RecyclerView.ViewHolder {
+    public static class QuestionViewHolder extends RecyclerView.ViewHolder {
 
-        private EditText editTextQuestion;
+        TextView questionNumber;
+        EditText questionText;
+        EditText[] answerOptions;
 
         public QuestionViewHolder(@NonNull View itemView) {
             super(itemView);
-            editTextQuestion = itemView.findViewById(R.id.editTextQuestion);
-        }
-
-        public void bind(int position) {
-            editTextQuestion.setText(questionsList.get(position));
-            editTextQuestion.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    questionsList.set(position, s.toString());
-                }
-            });
+            questionNumber = itemView.findViewById(R.id.questionNumber);
+            questionText = itemView.findViewById(R.id.questionText);
+            answerOptions = new EditText[5];
+            answerOptions[0] = itemView.findViewById(R.id.answerOptionA);
+            answerOptions[1] = itemView.findViewById(R.id.answerOptionB);
+            answerOptions[2] = itemView.findViewById(R.id.answerOptionC);
+            answerOptions[3] = itemView.findViewById(R.id.answerOptionD);
+            answerOptions[4] = itemView.findViewById(R.id.answerOptionE);
         }
     }
 }

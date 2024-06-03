@@ -5,35 +5,32 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.courseassistantapplication.R;
 import com.example.courseassistantapplication.recyclerview.ExamQuestionAdapter;
-import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.example.courseassistantapplication.R;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class CreateExamActivity extends AppCompatActivity {
 
-    private EditText examTitleEditText, questionCountEditText;
+    private EditText examTitleEditText, questionPoolCountEditText, questionsToShowCountEditText;
     private Button generateQuestionsButton, saveExamButton;
     private RecyclerView questionsRecyclerView;
     private ExamQuestionAdapter examQuestionAdapter;
-    private int questionCount;
+    private int questionPoolCount, questionsToShowCount;
 
     private String courseId;
 
     private DatabaseReference mUser;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +38,8 @@ public class CreateExamActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_exam);
 
         examTitleEditText = findViewById(R.id.examTitle);
-        questionCountEditText = findViewById(R.id.questionCount);
+        questionPoolCountEditText = findViewById(R.id.questionPoolCount);
+        questionsToShowCountEditText = findViewById(R.id.questionsToShowCount);
         generateQuestionsButton = findViewById(R.id.generateQuestionsButton);
         saveExamButton = findViewById(R.id.saveExamButton);
         questionsRecyclerView = findViewById(R.id.questionsRecyclerView);
@@ -51,9 +49,16 @@ public class CreateExamActivity extends AppCompatActivity {
         generateQuestionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!TextUtils.isEmpty(questionCountEditText.getText().toString())) {
-                    questionCount = Integer.parseInt(questionCountEditText.getText().toString());
-                    examQuestionAdapter = new ExamQuestionAdapter(questionCount);
+                if (!TextUtils.isEmpty(questionPoolCountEditText.getText().toString()) && !TextUtils.isEmpty(questionsToShowCountEditText.getText().toString())) {
+                    questionPoolCount = Integer.parseInt(questionPoolCountEditText.getText().toString());
+                    questionsToShowCount = Integer.parseInt(questionsToShowCountEditText.getText().toString());
+
+                    if (questionsToShowCount > questionPoolCount) {
+                        Toast.makeText(CreateExamActivity.this, "Questions to show cannot be more than the question pool count", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    examQuestionAdapter = new ExamQuestionAdapter(questionPoolCount);
                     questionsRecyclerView.setLayoutManager(new LinearLayoutManager(CreateExamActivity.this));
                     questionsRecyclerView.setAdapter(examQuestionAdapter);
                     questionsRecyclerView.setVisibility(View.VISIBLE);
@@ -77,12 +82,13 @@ public class CreateExamActivity extends AppCompatActivity {
 
         Map<String, Object> examData = new HashMap<>();
         examData.put("title", examTitle);
-        examData.put("questionCount", questionCount);
-        examData.put("CreaterMail",currentEmail);
-        examData.put("Course",courseId);
+        examData.put("questionPoolCount", questionPoolCount);
+        examData.put("questionsToShowCount", questionsToShowCount);
+        examData.put("CreaterMail", currentEmail);
+        examData.put("Course", courseId);
 
         Map<String, Object> questionsMap = new HashMap<>();
-        for (int i = 0; i < questionCount; i++) {
+        for (int i = 0; i < questionPoolCount; i++) {
             View questionView = questionsRecyclerView.getChildAt(i);
             EditText questionText = questionView.findViewById(R.id.questionText);
             EditText[] answerOptions = new EditText[5];
@@ -107,6 +113,14 @@ public class CreateExamActivity extends AppCompatActivity {
         }
 
         examData.put("questions", questionsMap);
-        examsRef.setValue(examData);
+        examsRef.setValue(examData)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(CreateExamActivity.this, "Exam saved successfully", Toast.LENGTH_SHORT).show();
+                        finish(); // Close the activity after saving
+                    } else {
+                        Toast.makeText(CreateExamActivity.this, "Failed to save exam", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }
