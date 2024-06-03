@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.AddCommentsActivity">
+
+    <EditText
+        android:id="@+id/comment_content"
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:textAlignment="center"
+        android:layout_marginTop="40dp"
+        android:hint="Enter comment" />
+
+    <Button
+        android:id="@+id/post_comment_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Post Comment" />
+</LinearLayout>

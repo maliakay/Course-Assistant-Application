@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Course Assistant Application</string>
+
+    <string-array name="recipients_array">
+        <item>Akademisyen</item>
+        <item>Admin</item>
+    </string-array>
+
+    <string name="title_activity_add_course">AddCourseActivity</string>
+</resources>
