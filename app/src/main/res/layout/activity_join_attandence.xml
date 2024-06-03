@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".activity.JoinAttandenceActivity">
+    tools:context=".activity.JoinAttendanceActivity">
 
     <Button
         android:layout_marginTop="60dp"

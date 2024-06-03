@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.courseassistantapplication.R;
 import com.example.courseassistantapplication.model.Report;
 import com.example.courseassistantapplication.recyclerview.ReportAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,6 +35,8 @@ public class ListReportsActivity extends AppCompatActivity {
     private List<Report> reportList;
     private Button buttonNewReport;
     private DatabaseReference mReference;
+    private FirebaseUser mUser;
+    FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +48,9 @@ public class ListReportsActivity extends AppCompatActivity {
         recyclerViewReports = findViewById(R.id.recyclerViewReports);
         buttonNewReport = findViewById(R.id.buttonNewReport);
 
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
+
         reportList = new ArrayList<>();
 
         ValueEventListener reportEventListener = new ValueEventListener() {
@@ -51,7 +58,10 @@ public class ListReportsActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 reportList.clear();
                 for (DataSnapshot childSnapshot : snapshot.getChildren()) {
-                    reportList.add(childSnapshot.getValue(Report.class));
+                    Report report = childSnapshot.getValue(Report.class);
+                    if(report.getAlıcı().equals(mUser.getEmail())){
+                        reportList.add(childSnapshot.getValue(Report.class));
+                    }
                 }
                 // Report listesini tarihe göre sırala
                 Collections.sort(reportList, new Comparator<Report>() {

@@ -35,12 +35,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class JoinAttandenceActivity extends AppCompatActivity {
+public class JoinAttendanceActivity extends AppCompatActivity {
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private FusedLocationProviderClient fusedLocationClient;
     private DatabaseReference mReference;
-
+    private Button btnStartAttendance;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,13 +51,33 @@ public class JoinAttandenceActivity extends AppCompatActivity {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         mReference = FirebaseDatabase.getInstance().getReference("yoklama");
-        Button btnStartAttendance = findViewById(R.id.btnJoinAttendance);
+        btnStartAttendance = findViewById(R.id.btnJoinAttendance);
 
 
         btnStartAttendance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkPermissions();
+                mReference.child("BLM3131").child("katılan öğrenciler").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        boolean isAlreadyAttend = false;
+                        for (DataSnapshot childSnapshot : snapshot.getChildren()){
+                            if ( childSnapshot.getValue().equals("emir.ozturk1@std.yildiz.edu.tr") ){
+                                Toast.makeText(JoinAttendanceActivity.this, "Yoklamada kaydınız bulunmakta", Toast.LENGTH_SHORT).show();
+                                isAlreadyAttend = true;
+                            }
+                        }
+                        if (!isAlreadyAttend){
+                            checkPermissions();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(JoinAttendanceActivity.this, error.toException().toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
             }
         });
     }
@@ -94,7 +114,7 @@ public class JoinAttandenceActivity extends AppCompatActivity {
                             }
                         }
                         else {
-                            Toast.makeText(JoinAttandenceActivity.this, "Failed to get location", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(JoinAttendanceActivity.this, "Failed to get location", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -129,17 +149,19 @@ public class JoinAttandenceActivity extends AppCompatActivity {
     }
 
     private void joinToAttandence(Location location){
-        mReference.addValueEventListener(new ValueEventListener() {
+        mReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot childSnapshot : snapshot.getChildren()) {
-                    Toast.makeText(JoinAttandenceActivity.this, childSnapshot.toString(), Toast.LENGTH_SHORT).show();
                     if(childSnapshot.getKey().equals("BLM3131")){
                         MyLocation instructorLocation = childSnapshot.child("konum").getValue(MyLocation.class);
                         Log.d("lokasyon", String.valueOf(instructorLocation.distanceTo(location)) +" "+ String.valueOf(abs(location.getAltitude()-instructorLocation.getAltitude())));
-                        if(instructorLocation.distanceTo(location) < 25 &&
+                        if(instructorLocation.distanceTo(location) < 20 &&
                                 abs(location.getAltitude()-instructorLocation.getAltitude()) < 3){
-                            mReference.child("BLM3131").child("katılan öğrenciler").setValue("emir.ozturk1std.yildiz.edu.tr");
+                            mReference.child("BLM3131").child("katılan öğrenciler").push().setValue("emir.ozturk1@std.yildiz.edu.tr");
+                            Toast.makeText(JoinAttendanceActivity.this, "Yoklamaya katıldın", Toast.LENGTH_SHORT).show();
+                        }else{
+                            //TODO snackbar koy tekrar katılmasını iste
                         }
                     }
                 }
@@ -147,7 +169,7 @@ public class JoinAttandenceActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(JoinAttandenceActivity.this, error.toException().toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(JoinAttendanceActivity.this, error.toException().toString(), Toast.LENGTH_SHORT).show();
             }
         });
     }
