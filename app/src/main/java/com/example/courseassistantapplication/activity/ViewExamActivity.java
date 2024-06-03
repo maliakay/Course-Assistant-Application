@@ -21,6 +21,7 @@ import com.example.courseassistantapplication.R;
 import com.example.courseassistantapplication.model.Question;
 import com.example.courseassistantapplication.model.QuestionWithIndex;
 import com.example.courseassistantapplication.recyclerview.StudentExamAdapter;
+import com.example.courseassistantapplication.recyclerview.StudentResultAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,13 +39,16 @@ public class ViewExamActivity extends AppCompatActivity {
 
     private static final String TAG = "ViewExamActivity";
 
+    private TextView courseIdTextView;
     private TextView examTitleTextView;
     private Spinner examSpinner;
     private RecyclerView questionsRecyclerView;
     private Button submitExamButton;
     private StudentExamAdapter studentExamAdapter;
+    private StudentResultAdapter studentResultAdapter;
     private List<QuestionWithIndex> allQuestions;
     private List<QuestionWithIndex> selectedQuestions;
+    private List<QuestionWithIndex> answeredQuestions;
     private List<String> examTitles;
     private List<String> examIds;
     private List<String> courseIds;
@@ -54,25 +58,27 @@ public class ViewExamActivity extends AppCompatActivity {
     private String selectedExamId;
     private int questionsToShowCount;
     private boolean questionsLoaded = false;
+    private boolean viewingResults = false; // Flag to indicate if viewing results
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_exam);
 
-        examTitleTextView = findViewById(R.id.examTitleTextView);
+        courseIdTextView = findViewById(R.id.courseIdTextView);
         examSpinner = findViewById(R.id.examSpinner);
         questionsRecyclerView = findViewById(R.id.questionsRecyclerView);
         submitExamButton = findViewById(R.id.submitExamButton);
 
         allQuestions = new ArrayList<>();
         selectedQuestions = new ArrayList<>();
+        answeredQuestions = new ArrayList<>();
         examTitles = new ArrayList<>();
         examIds = new ArrayList<>();
         courseIds = new ArrayList<>();
         studentExamAdapter = new StudentExamAdapter(selectedQuestions);
+        studentResultAdapter = new StudentResultAdapter(answeredQuestions);
         questionsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        questionsRecyclerView.setAdapter(studentExamAdapter);
 
         loadCourses();
 
@@ -80,6 +86,7 @@ public class ViewExamActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedCourseId = courseIds.get(position);
+                courseIdTextView.setText(selectedCourseId); // Set the course ID text
                 loadExams(selectedCourseId);
             }
 
@@ -92,7 +99,12 @@ public class ViewExamActivity extends AppCompatActivity {
         submitExamButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                submitExamResponses();
+                if (viewingResults) {
+                    // If viewing results, hide the button
+                    submitExamButton.setVisibility(View.GONE);
+                } else {
+                    submitExamResponses();
+                }
             }
         });
     }
@@ -166,8 +178,7 @@ public class ViewExamActivity extends AppCompatActivity {
         examRef.child(examId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String examTitle = snapshot.child("title").getValue(String.class);
-                examTitleTextView.setText(examTitle);
+
                 questionsToShowCount = snapshot.child("questionsToShowCount").getValue(Integer.class);
 
                 allQuestions.clear(); // Clear the all questions list
@@ -182,24 +193,8 @@ public class ViewExamActivity extends AppCompatActivity {
 
                 Log.d(TAG, "Total questions loaded: " + allQuestions.size());
 
-                // Rastgele soruları sadece bir kez seç
-                if (!questionsLoaded) {
-                    Collections.shuffle(allQuestions);
-                    selectedQuestions.clear(); // Clear selected questions list here
-
-                    if (allQuestions.size() > questionsToShowCount) {
-                        selectedQuestions.addAll(allQuestions.subList(0, questionsToShowCount)); // Get only the required number of questions
-                    } else {
-                        selectedQuestions.addAll(allQuestions);
-                    }
-                    questionsLoaded = true; // Set the flag
-                }
-
-                Log.d(TAG, "Total selected questions: " + selectedQuestions.size());
-
-                studentExamAdapter.notifyDataSetChanged();
-                questionsRecyclerView.setVisibility(View.VISIBLE);
-                submitExamButton.setVisibility(View.VISIBLE);
+                // Check if the student has already answered this exam
+                checkIfExamAnswered();
             }
 
             @Override
@@ -207,6 +202,70 @@ public class ViewExamActivity extends AppCompatActivity {
                 Toast.makeText(ViewExamActivity.this, "Failed to load exam data", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void checkIfExamAnswered() {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference responsesRef = examRef.child(selectedExamId).child("responses").child(userId);
+
+        responsesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // If the student has answered the exam, load the results
+                    loadExamResults(dataSnapshot);
+                } else {
+                    // If the student has not answered, load the exam questions
+                    loadExamQuestions();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e(TAG, "Error checking responses: ", databaseError.toException());
+                Toast.makeText(ViewExamActivity.this, "Error checking responses", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void loadExamQuestions() {
+        Collections.shuffle(allQuestions);
+        selectedQuestions.clear(); // Clear selected questions list here
+
+        if (allQuestions.size() > questionsToShowCount) {
+            selectedQuestions.addAll(allQuestions.subList(0, questionsToShowCount)); // Get only the required number of questions
+        } else {
+            selectedQuestions.addAll(allQuestions);
+        }
+        questionsLoaded = true; // Set the flag
+
+        Log.d(TAG, "Total selected questions: " + selectedQuestions.size());
+
+        questionsRecyclerView.setAdapter(studentExamAdapter);
+        studentExamAdapter.notifyDataSetChanged();
+        questionsRecyclerView.setVisibility(View.VISIBLE);
+        submitExamButton.setVisibility(View.VISIBLE);
+    }
+
+    private void loadExamResults(DataSnapshot dataSnapshot) {
+        answeredQuestions.clear();
+        for (DataSnapshot questionSnapshot : dataSnapshot.getChildren()) {
+            String questionKey = questionSnapshot.getKey();
+            String answer = questionSnapshot.getValue(String.class);
+            for (QuestionWithIndex questionWithIndex : allQuestions) {
+                if (questionWithIndex.getFirebaseKey().equals(questionKey)) {
+                    questionWithIndex.getQuestion().setUserAnswer(answer);
+                    answeredQuestions.add(questionWithIndex);
+                }
+            }
+        }
+
+        viewingResults = true; // Set flag to true when viewing results
+
+        questionsRecyclerView.setAdapter(studentResultAdapter);
+        studentResultAdapter.notifyDataSetChanged();
+        questionsRecyclerView.setVisibility(View.VISIBLE);
+        submitExamButton.setVisibility(View.GONE); // Hide the submit button
     }
 
     private void submitExamResponses() {

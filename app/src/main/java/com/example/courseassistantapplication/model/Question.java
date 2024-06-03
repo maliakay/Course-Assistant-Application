@@ -5,9 +5,10 @@ import java.util.Map;
 public class Question {
     private String questionText;
     private Map<String, String> options;
+    private String userAnswer;
 
     public Question() {
-        // Boş yapıcı metod Firebase için gerekli
+        // Default constructor required for calls to DataSnapshot.getValue(Question.class)
     }
 
     public Question(String questionText, Map<String, String> options) {
@@ -29,5 +30,13 @@ public class Question {
 
     public void setOptions(Map<String, String> options) {
         this.options = options;
+    }
+
+    public String getUserAnswer() {
+        return userAnswer;
+    }
+
+    public void setUserAnswer(String userAnswer) {
+        this.userAnswer = userAnswer;
     }
 }
