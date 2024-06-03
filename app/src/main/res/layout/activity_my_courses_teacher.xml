@@ -29,9 +29,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="showPolls"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:backgroundTint="@color/black"
         android:text="Show Polls"
+        android:textSize="18sp"
+        app:cornerRadius="20dp"/>
+
+    <Button
+        android:id="@+id/show_exam"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="showExam"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/black"
+        android:text="Show Exam"
         android:textSize="18sp"
         app:cornerRadius="20dp"/>
 
