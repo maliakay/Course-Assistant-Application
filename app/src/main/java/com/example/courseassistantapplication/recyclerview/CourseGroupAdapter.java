@@ -84,7 +84,8 @@ public class CourseGroupAdapter extends RecyclerView.Adapter<CourseGroupAdapter.
         else{
             holder.groupNumbers.setText(x);
             holder.btn_add_student.setVisibility(View.GONE);
-            holder.btn_add_poll.setVisibility(View.GONE);// Öğrenci ise butonu gizle
+            holder.btn_add_poll.setVisibility(View.GONE);
+            holder.btn_show_poll.setVisibility(View.GONE);// Öğrenci ise butonu gizle
         }
 
     }

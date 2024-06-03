@@ -67,6 +67,7 @@ public class PollResultsActivity extends AppCompatActivity {
                     }
 
                     Map<String, Map<String, Integer>> questionResults = new HashMap<>();
+                    List<Map<String, Integer>> answersList = new ArrayList<>();
 
                     for (DataSnapshot responseSnapshot : pollSnapshot.child("responses").getChildren()) {
                         for (DataSnapshot answerSnapshot : responseSnapshot.getChildren()) {
@@ -88,10 +89,10 @@ public class PollResultsActivity extends AppCompatActivity {
                     }
 
                     for (Map.Entry<String, Map<String, Integer>> entry : questionResults.entrySet()) {
-                        String question = entry.getKey();
-                        Map<String, Integer> answerCounts = entry.getValue();
-                        resultsList.add(new QuestionResult(pollTitle, question, answerCounts));
+                        answersList.add(entry.getValue());
                     }
+
+                    resultsList.add(new QuestionResult(pollTitle, questionsList, answersList));
                 }
                 resultsAdapter.notifyDataSetChanged();
             }

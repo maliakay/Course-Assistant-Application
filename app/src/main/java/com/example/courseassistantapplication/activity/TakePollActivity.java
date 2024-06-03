@@ -1,6 +1,6 @@
 package com.example.courseassistantapplication.activity;
 
-// TakePollActivity.java
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,9 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.courseassistantapplication.R;
+import com.example.courseassistantapplication.model.Poll;
 import com.example.courseassistantapplication.recyclerview.AnswerQuestionsAdapter;
-import com.example.courseassistantapplication.recyclerview.QuestionsAdapter;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,40 +29,72 @@ import java.util.Map;
 
 public class TakePollActivity extends AppCompatActivity {
 
-    private TextView textViewPollTitle;
     private RecyclerView recyclerViewQuestions;
-    private Button buttonSubmitAnswers;
-    private AnswerQuestionsAdapter AnswerQuestionsAdapter;
+    private AnswerQuestionsAdapter questionsAdapter;
     private List<String> questionsList;
     private List<String> answersList;
-    private String pollId;
-
     private DatabaseReference mReference;
-
+    private String pollId,pollName;
+    private String userId;
+    private Button buttonSubmit;
+    private TextView textViewPollTitle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_take_poll);
 
-        textViewPollTitle = findViewById(R.id.textViewPollTitle);
         recyclerViewQuestions = findViewById(R.id.recyclerViewQuestions);
-        buttonSubmitAnswers = findViewById(R.id.buttonSubmitAnswers);
+        buttonSubmit = findViewById(R.id.buttonSubmit);
+        textViewPollTitle = findViewById(R.id.textViewPollTitle);
 
         mReference = FirebaseDatabase.getInstance().getReference();
+        userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         questionsList = new ArrayList<>();
         answersList = new ArrayList<>();
-        AnswerQuestionsAdapter = new AnswerQuestionsAdapter(questionsList,answersList);
+        questionsAdapter = new AnswerQuestionsAdapter(questionsList, answersList);
 
         recyclerViewQuestions.setLayoutManager(new LinearLayoutManager(this));
-        recyclerViewQuestions.setAdapter(AnswerQuestionsAdapter);
+        recyclerViewQuestions.setAdapter(questionsAdapter);
 
         pollId = getIntent().getStringExtra("pollId");
-        loadPoll();
+        pollName = getIntent().getStringExtra("pollName");
 
-        buttonSubmitAnswers.setOnClickListener(new View.OnClickListener() {
+        textViewPollTitle.setText(pollName);
+        if (pollId == null) {
+            Toast.makeText(this, "Anket ID'si bulunamadı", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        checkIfPollAlreadySolved();
+
+        buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                submitAnswers();
+                submitPoll();
+            }
+        });
+    }
+
+    private void checkIfPollAlreadySolved() {
+        mReference.child("Anketler").child(pollId).child("responses").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // Kullanıcı daha önce anketi çözmüş, geri döndür ve mesaj göster
+                    Toast.makeText(TakePollActivity.this, "Bu anketi daha önce çözdünüz.", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(TakePollActivity.this, MyCoursesTeacherActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    // Kullanıcı anketi daha önce çözmemiş, anketi yükle
+                    loadPoll();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(TakePollActivity.this, "Anket durumu kontrol edilemedi: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -72,15 +103,23 @@ public class TakePollActivity extends AppCompatActivity {
         mReference.child("Anketler").child(pollId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String title = dataSnapshot.child("title").getValue(String.class);
-                textViewPollTitle.setText(title);
-
-                for (DataSnapshot questionSnapshot : dataSnapshot.child("questions").getChildren()) {
-                    String question = questionSnapshot.getValue(String.class);
-                    questionsList.add(question);
-                    answersList.add(""); // Initialize with empty answers
+                if (dataSnapshot.exists()) {
+                    Poll poll = dataSnapshot.getValue(Poll.class);
+                    if (poll != null) {
+                        questionsList.clear();
+                        for (DataSnapshot questionSnapshot : dataSnapshot.child("questions").getChildren()) {
+                            questionsList.add(questionSnapshot.getValue(String.class));
+                        }
+                        answersList.clear();
+                        for (int i = 0; i < questionsList.size(); i++) {
+                            answersList.add("");
+                        }
+                        questionsAdapter.notifyDataSetChanged();
+                    }
+                } else {
+                    Toast.makeText(TakePollActivity.this, "Anket bulunamadı", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
-                AnswerQuestionsAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -90,21 +129,22 @@ public class TakePollActivity extends AppCompatActivity {
         });
     }
 
-    private void submitAnswers() {
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-        Map<String, Object> answers = new HashMap<>();
+    private void submitPoll() {
+        Map<String, String> answersMap = new HashMap<>();
         for (int i = 0; i < questionsList.size(); i++) {
-            answers.put("question" + (i + 1), answersList.get(i));
+            answersMap.put("question" + (i + 1), answersList.get(i));
         }
 
-        mReference.child("Anketler").child(pollId).child("responses").child(userId).setValue(answers).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Toast.makeText(TakePollActivity.this, "Cevaplar başarıyla gönderildi", Toast.LENGTH_SHORT).show();
-                finish();
-            } else {
-                Toast.makeText(TakePollActivity.this, "Cevaplar gönderilemedi: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        mReference.child("Anketler").child(pollId).child("responses").child(userId).setValue(answersMap)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(TakePollActivity.this, "Anket başarıyla gönderildi.", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(TakePollActivity.this, MyCoursesTeacherActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Toast.makeText(TakePollActivity.this, "Anket gönderilemedi: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }

@@ -58,6 +58,7 @@ public class PollsAdapter extends RecyclerView.Adapter<PollsAdapter.PollViewHold
                 Context context = v.getContext();
                 Intent intent = new Intent(context, TakePollActivity.class);
                 intent.putExtra("pollId", poll.getPollId());
+                intent.putExtra("pollName",poll.getTitle());
                 context.startActivity(intent);
             });
         }

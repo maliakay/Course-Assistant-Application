@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.courseassistantapplication.R;
@@ -54,12 +55,15 @@ public class PollResultsAdapter extends RecyclerView.Adapter<PollResultsAdapter.
 
         public void bind(QuestionResult questionResult) {
             textViewPollTitle.setText(questionResult.getPollTitle());
-            textViewQuestion.setText(questionResult.getQuestion());
-            StringBuilder results = new StringBuilder();
-            for (Map.Entry<String, Integer> entry : questionResult.getAnswerCounts().entrySet()) {
-                results.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
+            StringBuilder questionsAndAnswers = new StringBuilder();
+            for (int i = 0; i < questionResult.getQuestions().size(); i++) {
+                questionsAndAnswers.append(questionResult.getQuestions().get(i)).append("\n");
+                for (Map.Entry<String, Integer> entry : questionResult.getAnswerCounts().get(i).entrySet()) {
+                    questionsAndAnswers.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
+                }
+                questionsAndAnswers.append("\n");
             }
-            textViewResults.setText(results.toString().trim());
+            textViewQuestion.setText(questionsAndAnswers.toString().trim());
         }
     }
 }
