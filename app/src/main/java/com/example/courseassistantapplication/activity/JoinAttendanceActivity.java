@@ -170,7 +170,8 @@ public class JoinAttendanceActivity extends AppCompatActivity {
                             mReference.child(courseID).child("katılan öğrenciler").push().setValue(userMail);
                             Toast.makeText(JoinAttendanceActivity.this, "Yoklamaya katıldın", Toast.LENGTH_SHORT).show();
                         }else{
-                            //TODO snackbar koy tekrar katılmasını iste
+                            Toast.makeText(JoinAttendanceActivity.this, "Derslikte değilsiniz", Toast.LENGTH_SHORT).show();
+
                         }
                     }
                 }
