@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/questionNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Question Number"
+        android:textStyle="bold"
+        android:paddingBottom="8dp" />
+
+    <EditText
+        android:id="@+id/questionText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Question Text" />
+
+    <EditText
+        android:id="@+id/answerOptionA"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Option A" />
+
+    <EditText
+        android:id="@+id/answerOptionB"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Option B" />
+
+    <EditText
+        android:id="@+id/answerOptionC"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Option C" />
+
+    <EditText
+        android:id="@+id/answerOptionD"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Option D" />
+
+    <EditText
+        android:id="@+id/answerOptionE"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Option E" />
+</LinearLayout>

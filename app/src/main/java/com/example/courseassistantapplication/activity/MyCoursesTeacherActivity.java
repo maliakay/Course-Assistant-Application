@@ -33,7 +33,7 @@ public class MyCoursesTeacherActivity extends AppCompatActivity {
     // EĞİTMENLERİN KURSLARINI GÖRÜNTÜLEDİĞİ YER
     private FirebaseAuth mAuth;
     private DatabaseReference mReference;
-    private Button addCourseBtn,showPollsBtn;
+    private Button addCourseBtn,showPollsBtn, showExamBtn;
 
     private FirebaseUser mUser;
     private RecyclerView recyclerView;
@@ -54,6 +54,7 @@ public class MyCoursesTeacherActivity extends AppCompatActivity {
         addCourseBtn = findViewById(R.id.add_course);
         showPollsBtn = findViewById(R.id.show_polls);
         recyclerView = findViewById(R.id.recycler_view);
+        showExamBtn = findViewById(R.id.show_exam);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         courseList = new ArrayList<>();
         adapter = new CourseGroupAdapter(courseList, this, mUser);
@@ -69,6 +70,7 @@ public class MyCoursesTeacherActivity extends AppCompatActivity {
             }else{
                 loadTeacherCourses();
                 showPollsBtn.setVisibility(View.GONE);
+                showExamBtn.setVisibility(View.GONE);
             }
         } else {
             // User is not logged in, redirect to login activity
@@ -87,6 +89,10 @@ public class MyCoursesTeacherActivity extends AppCompatActivity {
     }
     public void showPolls(View view){
         startActivity(new Intent(MyCoursesTeacherActivity.this, ShowPollsStdActivity.class));
+    }
+
+    public void showExam(View view){
+        startActivity(new Intent(MyCoursesTeacherActivity.this, ViewExamActivity.class));
     }
 
     private void loadTeacherCourses() {

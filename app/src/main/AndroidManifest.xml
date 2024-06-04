@@ -25,8 +25,18 @@
             android:name=".activity.AddPollsActivity"
             android:exported="false" />
         <activity
+            android:name=".activity.ViewExamResponsesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.ViewExamActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.CreateExamActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.PollResultsActivity"
             android:exported="false" />
+
         <activity
             android:name=".activity.TakePollActivity"
             android:exported="false" />

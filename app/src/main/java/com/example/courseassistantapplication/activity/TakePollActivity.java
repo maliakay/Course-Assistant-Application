@@ -30,7 +30,7 @@ import java.util.Map;
 public class TakePollActivity extends AppCompatActivity {
 
     private RecyclerView recyclerViewQuestions;
-    private AnswerQuestionsAdapter questionsAdapter;
+    private AnswerQuestionsAdapter QuestionPollAdapter;
     private List<String> questionsList;
     private List<String> answersList;
     private DatabaseReference mReference;
@@ -51,10 +51,10 @@ public class TakePollActivity extends AppCompatActivity {
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         questionsList = new ArrayList<>();
         answersList = new ArrayList<>();
-        questionsAdapter = new AnswerQuestionsAdapter(questionsList, answersList);
+        QuestionPollAdapter = new AnswerQuestionsAdapter(questionsList, answersList);
 
         recyclerViewQuestions.setLayoutManager(new LinearLayoutManager(this));
-        recyclerViewQuestions.setAdapter(questionsAdapter);
+        recyclerViewQuestions.setAdapter(QuestionPollAdapter);
 
         pollId = getIntent().getStringExtra("pollId");
         pollName = getIntent().getStringExtra("pollName");
@@ -114,7 +114,7 @@ public class TakePollActivity extends AppCompatActivity {
                         for (int i = 0; i < questionsList.size(); i++) {
                             answersList.add("");
                         }
-                        questionsAdapter.notifyDataSetChanged();
+                        QuestionPollAdapter.notifyDataSetChanged();
                     }
                 } else {
                     Toast.makeText(TakePollActivity.this, "Anket bulunamadı", Toast.LENGTH_SHORT).show();

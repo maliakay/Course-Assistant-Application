@@ -3,13 +3,13 @@ package com.example.courseassistantapplication.model;
 import java.util.List;
 import java.util.Map;
 
-public class QuestionResult {
+public class QuestionPollResult {
 
     private String pollTitle;
     private List<String> questions;
     private List<Map<String, Integer>> answerCounts;
 
-    public QuestionResult(String pollTitle, List<String> questions, List<Map<String, Integer>> answerCounts) {
+    public QuestionPollResult(String pollTitle, List<String> questions, List<Map<String, Integer>> answerCounts) {
         this.pollTitle = pollTitle;
         this.questions = questions;
         this.answerCounts = answerCounts;
